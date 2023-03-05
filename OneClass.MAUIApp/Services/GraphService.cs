@@ -7,8 +7,8 @@ namespace OneClass.MAUIApp.Services
 	internal class GraphService
 	{
 		private readonly string[] _scopes = new[] { "User.Read" };
-		private const string _clientId = "9a17e3bc-872d-461d-b92b-458828b5eb3d";
-		private const string _tenantId = "84c31ca0-ac3b-4eae-ad11-519d80233e6f";
+		private const string _clientId = "896a45d1-095f-416d-baf3-ff19493fc2c1";
+		private const string _tenantId = "dc0474a7-98b7-41c5-9561-bbef81b01215";
 		private GraphServiceClient _client;
 
 		public GraphService()
