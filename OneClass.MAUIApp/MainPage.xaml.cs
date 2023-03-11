@@ -1,18 +1,29 @@
-﻿using Microsoft.Graph.Models;
+﻿using OneClass.Domain.DbModels;
+using OneClass.Domain.GraphModels;
 using OneClass.MAUIApp.Services;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace OneClass.MAUIApp;
 
 public partial class MainPage : ContentPage
 {
+	private AuthService _authService;
 	int _count = 0;
-	private GraphService _graphService;
-	private User _user;
+	string Token { get; set; }
 	public MainPage()
 	{
 		InitializeComponent();
 	}
-
+	protected override async void OnAppearing()
+	{
+		base.OnAppearing();
+		if (_authService is null)
+		{
+			_authService = new AuthService();
+			Token = await _authService.GetAuthenticationToken();
+		}
+	}
 	private void OnCounterClicked(object sender, EventArgs e)
 	{
 		_count++;
@@ -24,14 +35,16 @@ public partial class MainPage : ContentPage
 
 		SemanticScreenReader.Announce(CounterBtn.Text);
 	}
-
 	private async void GetUserInfoBtn_Clicked(object sender, EventArgs e)
 	{
-		if (_graphService == null)
+		using var httpClient = new HttpClient();
+		httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token); ;
+		var response = await httpClient.GetAsync("https://localhost:5001/my-data");
+		if (response.IsSuccessStatusCode)
 		{
-			_graphService = new GraphService();
+			HelloLabel.Text = "Loading...";
+			var me = await response.Content.ReadFromJsonAsync<UserData>();
+			HelloLabel.Text = $"Hello, {me.DisplayName}!";
 		}
-		_user = await _graphService.GetMyDetailsAsync();
-		HelloLabel.Text = $"Hello, {_user.DisplayName}!";
 	}
 }
