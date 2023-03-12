@@ -6,21 +6,23 @@ namespace OneClass.WebAPI.Services;
 
 public class UserService : IUserService
 {
+    private readonly IAccessTokenService _accessTokenService;
+    public UserService(IAccessTokenService accessTokenService)
+        => _accessTokenService = accessTokenService;
+
     public async Task<UserData> GetAuthenticatedUserAsync(
         HttpContext context,
         CancellationToken cancellationToken = default
     )
     {
-        var token = context.Request.Headers.Authorization[0];
+        var token = _accessTokenService.GetAccessToken(context);
         if (token is null)
         {
             throw new Exception("Unauthorized");
         }
         var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Bearer",
-            token.Replace("Bearer", "")
-        );
+            "Bearer", token);
         var response = await httpClient.GetAsync(
             "https://graph.microsoft.com/v1.0/me",
             cancellationToken
