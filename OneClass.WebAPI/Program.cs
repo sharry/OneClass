@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using Marten;
+using Carter;
 using OneClass.Domain.DbModels;
 using OneClass.Domain.GraphModels;
 
@@ -14,7 +15,8 @@ builder.Services.AddMarten(config =>
 	var password = builder.Configuration.GetValue<string>("Postgres:Password");
 	config.Connection($"Host={host};Port={port};Database={database};Username={username};Password={password}");
 });
-	
+builder.Services.AddCarter();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -63,5 +65,7 @@ app.MapGet("/my-data",
 		await session.SaveChangesAsync(cancellationToken);
 		return Results.Ok(userData);
 });
+
+app.MapCarter();
 
 app.Run();
