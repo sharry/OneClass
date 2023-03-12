@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using OneClass.Domain.DbModels;
+using OneClass.Domain.GraphModels;
 
 namespace OneClass.WebAPI.Services;
 
@@ -28,13 +29,11 @@ public class UserService : IUserService
         {
             throw new Exception("Bad Request");
         }
-        var user = await response.Content.ReadFromJsonAsync<UserData>(
-            cancellationToken: cancellationToken
-        );
-        if (user is null)
+        var me = await response.Content.ReadFromJsonAsync<Me>(cancellationToken: cancellationToken);
+        if (me is null)
         {
             throw new Exception("Bad Request");
         }
-        return user;
+        return UserData.FromMe(me);
     }
 }

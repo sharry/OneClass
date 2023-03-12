@@ -16,12 +16,12 @@ public record UserData(
 	public static UserData FromMe(Me me)
 	{
 		return new UserData(
-			me.Id,
-			me.DisplayName,
-			me.GivenName,
-			me.Surname,
-			me.UserPrincipalName,
-			new List<JoinedClass>()
+			Id: me.Id,
+			GivenName: me.GivenName,
+			Surname: me.Surname,
+			DisplayName: me.DisplayName,
+			EmailAddress: me.UserPrincipalName,
+			JoinedClasses: new List<JoinedClass>()
 		);
 	}
 }
