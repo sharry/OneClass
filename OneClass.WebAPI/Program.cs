@@ -1,5 +1,6 @@
 using Marten;
 using Carter;
+using OneClass.Domain.DbModels;
 using OneClass.WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);

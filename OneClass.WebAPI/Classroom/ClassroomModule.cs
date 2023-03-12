@@ -20,11 +20,12 @@ public class ClassroomModule : ICarterModule
             {
                 var user = await userService.GetAuthenticatedUserAsync(context, cancellationToken);
                 var classrooms = await session
-                    .Query<ClassRoomData>()
-                    .Where(x => x.TeacherId == user.Id || x.StudentIds.Any(id => id == user.Id))
+                    .Query<ClassroomData>()
                     .ToListAsync(cancellationToken);
-
-                return Results.Ok(classrooms);
+                var userClassrooms = classrooms
+                    .Where(x => x.TeacherId == user.Id || x.StudentIds.Any(y => y == user.Id))
+                    .ToList();
+                return Results.Ok(userClassrooms);
             }
         );
 
@@ -40,7 +41,7 @@ public class ClassroomModule : ICarterModule
             {
                 var user = await userService.GetAuthenticatedUserAsync(context, cancellationToken);
                 var classroom = await session
-                    .Query<ClassRoomData>()
+                    .Query<ClassroomData>()
                     .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
                 if (classroom is null)
@@ -48,7 +49,7 @@ public class ClassroomModule : ICarterModule
                     return Results.NotFound();
                 }
 
-                if (classroom.TeacherId != user.Id && !classroom.StudentIds.Any(x => x == user.Id))
+                if (classroom.TeacherId != user.Id && classroom.StudentIds.All(x => x != user.Id))
                 {
                     return Results.Unauthorized();
                 }
@@ -60,7 +61,7 @@ public class ClassroomModule : ICarterModule
         app.MapPost(
             "/api/classrooms",
             (
-                ClassRoomData classRoomData,
+                ClassroomData classRoomData,
                 IDocumentSession session,
                 HttpContext context,
                 IUserService userService,
@@ -70,7 +71,7 @@ public class ClassroomModule : ICarterModule
                 var user = userService.GetAuthenticatedUserAsync(context, cancellationToken).Result;
                 classRoomData.Id = Guid.NewGuid().ToString();
                 classRoomData.TeacherId = user.Id;
-                classRoomData.StudentIds = new string[0];
+                classRoomData.StudentIds = Array.Empty<string>();
 
                 session.Store(classRoomData);
                 session.SaveChanges();
@@ -82,7 +83,7 @@ public class ClassroomModule : ICarterModule
             "/api/classrooms/{id}",
             (
                 string id,
-                ClassRoomData classRoomData,
+                ClassroomData classRoomData,
                 IDocumentSession session,
                 HttpContext context,
                 IUserService userService,
@@ -90,7 +91,7 @@ public class ClassroomModule : ICarterModule
             ) =>
             {
                 var user = userService.GetAuthenticatedUserAsync(context, cancellationToken).Result;
-                var classroom = session.Query<ClassRoomData>().FirstOrDefault(x => x.Id == id);
+                var classroom = session.Query<ClassroomData>().FirstOrDefault(x => x.Id == id);
 
                 if (classroom is null)
                 {
@@ -124,7 +125,7 @@ public class ClassroomModule : ICarterModule
             ) =>
             {
                 var user = userService.GetAuthenticatedUserAsync(context, cancellationToken).Result;
-                var classroom = session.Query<ClassRoomData>().FirstOrDefault(x => x.Id == id);
+                var classroom = session.Query<ClassroomData>().FirstOrDefault(x => x.Id == id);
 
                 if (classroom is null)
                 {
