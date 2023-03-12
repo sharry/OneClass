@@ -1,5 +1,4 @@
 ﻿using OneClass.Domain.GraphModels;
-using OneClass.Domain.Users;
 
 namespace OneClass.Domain.DbModels;
 using ClassId = String;
@@ -26,15 +25,6 @@ public record UserData(
 		);
 	}
 }
-// private List<ClassId> JoinedClasses { get; set; } = new();
-// public void JoinClass(ClassId classId)
-// 	=> JoinedClasses.Add(classId);
-// public void LeaveClass(ClassId classId)
-// 	=> JoinedClasses.RemoveAll(x => x == classId);
-// public bool IsInClass(ClassId classId)
-// 	=> JoinedClasses.Any(x => x == classId);
-// public IEnumerable<ClassId> GetJoinedClasses()
-// 	=> JoinedClasses;
 
 public record JoinedClass(
 	string ClassId,

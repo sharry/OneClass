@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace OneClass.MAUIApp;
 public static class Constants
 {
-	// public static string ServiceUri = "https://demo-datasync-quickstart.azurewebsites.net";
+	public static string AccessTokenSecureStorageKey = "access_token";
+	public static string AccessTokenExpirationDateSecureStorageKey = "access_token_expiration_date";
 	public static string ClientId = "896a45d1-095f-416d-baf3-ff19493fc2c1";
 	public static string[] Scopes = new[]
 	{
