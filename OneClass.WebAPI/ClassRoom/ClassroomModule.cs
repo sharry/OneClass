@@ -5,7 +5,7 @@ using OneClass.WebAPI.Services;
 
 namespace OneClass.WebAPI.ClassRoom;
 
-public class ClassRoomModule : ICarterModule
+public class ClassroomModule : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
