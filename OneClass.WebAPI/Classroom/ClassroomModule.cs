@@ -3,7 +3,7 @@ using Marten;
 using OneClass.Domain.DbModels;
 using OneClass.WebAPI.Services;
 
-namespace OneClass.WebAPI.ClassRoom;
+namespace OneClass.WebAPI.Classroom;
 
 public class ClassroomModule : ICarterModule
 {
@@ -14,20 +14,11 @@ public class ClassroomModule : ICarterModule
             async (
                 IDocumentSession session,
                 HttpContext context,
+                IUserService userService,
                 CancellationToken cancellationToken
             ) =>
             {
-                UserData user;
-                user = await UserServices.GetAuthenticatedUserAsync(context, cancellationToken);
-
-                // try
-                // {
-                // }
-                // catch (System.Exception)
-                // {
-                //     return Results.Unauthorized();
-                // }
-
+                var user = await userService.GetAuthenticatedUserAsync(context, cancellationToken);
                 return Results.Ok(user);
             }
         );

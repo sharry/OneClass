@@ -3,8 +3,11 @@ using Marten;
 using Carter;
 using OneClass.Domain.DbModels;
 using OneClass.Domain.GraphModels;
+using OneClass.WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IUserService, UserService>();
 
 builder.Services.AddMarten(config =>
 {
@@ -15,6 +18,7 @@ builder.Services.AddMarten(config =>
 	var password = builder.Configuration.GetValue<string>("Postgres:Password");
 	config.Connection($"Host={host};Port={port};Database={database};Username={username};Password={password}");
 });
+
 builder.Services.AddCarter();
 
 var app = builder.Build();
