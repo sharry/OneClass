@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneClass.MAUIApp.View.JoinClassePage">
+    <VerticalStackLayout
+        Padding="16"
+        Spacing="8"
+        >
+        <!--image with corner radius, and with an upload image button in the bottom right corner -->
+        <Grid
+                Margin="0,0,0,12"
+            >
+            <Image
+                Source="placeholder.png"
+                HeightRequest="150"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Aspect="Fill"
+                />
+            <Button
+                Text="Change image"
+                FontSize="Caption"
+                Padding="12,0"
+                Margin="6"
+                Opacity="0.8"
+                TextColor="White"
+                Background="black"
+                HeightRequest="36"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                />
+        </Grid>
+        <!-- oulined text fields-->
+        <Label
+            Text="Classroom name *"
+
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            />
+        <Entry
+            Placeholder="Name"
+
+            Margin="0,0,0,12"
+            />
+        <Label
+            Text="Subject"
+
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            />
+        <Entry
+            Placeholder="Description"
+
+            Margin="0,0,0,12"
+            />
+        <Label
+            Text="Description"
+
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            />
+        <Entry
+            Placeholder="Subject"
+
+            Margin="0,0,0,12"
+
+            />
+        <!--button-->
+        <Button
+            Text="Create"
+Padding="18,8"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            />
+    </VerticalStackLayout>
+</ContentPage>

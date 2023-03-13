@@ -1,6 +1,7 @@
 ﻿using OneClass.Domain.DbModels;
 using OneClass.Domain.GraphModels;
 using OneClass.MAUIApp.Services;
+using OneClass.MAUIApp.View;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -24,9 +25,7 @@ public partial class MainPage : ContentPage
             Token = await _authService.GetAuthenticationToken();
             if(Token != null)
             {
-                loadUserData();
-                // hide the login  button
-
+                await Navigation.PushAsync(new ClassesPage());
 
             }
         }
