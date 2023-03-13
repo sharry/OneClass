@@ -8,7 +8,7 @@ export default ({ mode }) => {
     plugins: [React()],
     root: "src",
     server: {
-      port: process.env.VITE_PORT,
+      port: process.env.VITE_PORT || 3000,
     },
   });
 };
