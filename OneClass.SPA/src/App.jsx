@@ -22,8 +22,8 @@ const App = () => {
                         <Link to="/">OneClass</Link>
                     </header>
                     <Routes>
-                        <Route path="/classes" element={<Details />} />
-                        <Route path="/assignements" element={<SearchParams />} />
+                        <Route path="/classes" element={<ClassList />} />
+                        <Route path="/" element={<ClassList />} />
                     </Routes>
                 </OneClassContext.Provider>
             </QueryClientProvider>
