@@ -6,6 +6,7 @@ using OneClass.WebAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IOneDriveService, OneDriveService>();
 builder.Services.AddSingleton<IAccessTokenService, AccessTokenService>();
 
 builder.Services.AddMarten(config =>
