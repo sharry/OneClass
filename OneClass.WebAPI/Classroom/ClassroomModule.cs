@@ -80,7 +80,7 @@ public class ClassroomModule : ICarterModule
                 classRoomData.Id = Guid.NewGuid().ToString();
                 classRoomData.TeacherId = user.Id;
                 classRoomData.StudentIds = Array.Empty<string>();
-                classRoomData.JoinCode = Guid.NewGuid().ToString("N").Substring(0, 6);
+                classRoomData.JoinCode = Guid.NewGuid().ToString("N")[..6];
 
                 var folder = oneDriveService.CreateClassroomFolderAsync(context, classRoomData, cancellationToken).Result;
                 classRoomData.OneDriveFolderId = folder.Id;

@@ -1,4 +1,7 @@
-﻿using Carter;
+﻿using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using Carter;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using OneClass.Domain.DbModels;
@@ -64,6 +67,27 @@ public class AssignmentModule : ICarterModule
 			};
 			session.Store(classroomAssignment);
 			await session.SaveChangesAsync(cancellationToken);
+			var studentsEmails = await session
+				.Query<UserData>()
+				.Where(u => u.JoinedClasses
+					.Any(c => c.ClassroomId == classroomId && c.Role == "Student"))
+				.Select(u => u.EmailAddress)
+				.ToListAsync(cancellationToken);
+			var httpClient = new HttpClient();
+			var emailRequest = new EmailMessage(
+				assignment.Title,
+				new EmailMessageBody(assignment.Content ?? string.Empty, "Text"),
+				studentsEmails.Select(x => new EmailMessageToRecipient(
+					new EmailMessageToRecipientEmailAddress(x))).ToArray());
+			var emailRequestJson = JsonSerializer.Serialize(new { Message = emailRequest }, new JsonSerializerOptions
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+			});
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+			var emailResponse = await httpClient
+				.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail",
+					new StringContent(emailRequestJson, Encoding.UTF8, "application/json"),
+					cancellationToken);
 			return Results.Ok(classroomAssignment);
 		});
 	}
