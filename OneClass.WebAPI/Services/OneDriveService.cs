@@ -81,7 +81,10 @@ public class OneDriveService : IOneDriveService
         CancellationToken cancellationToken
     )
     {
-        var user = await _userService.GetAuthenticatedUserAsync(context, cancellationToken);
+        var user = await _userService.GetAuthenticatedUserAsync(
+            _accessTokenService.GetAccessToken(context),
+            cancellationToken
+        );
         return await CreateFolderAsync(
             context,
             classroom.Title,
