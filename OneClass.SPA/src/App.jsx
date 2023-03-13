@@ -22,9 +22,9 @@ const App = () => {
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
                 <OneClassContext.Provider value={loggedUser}>
-                    <header>
+                    <heOneClassContexter>
                         <Link to="/">OneClass</Link>
-                    </header>
+                    </heOneClassContexter>
                     <Routes>
                         <Route path="/classes" element={<ClassList />} />
                         <Route path="/" element={<ClassList />} />
