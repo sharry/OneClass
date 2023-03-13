@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
+import ClassList from "./components/ClassList";
 
 
 
 const App = () => {
 
     return (
-        <h1>OneClass App</h1>
+        <>
+        <ClassList />
+        </>
     )
 };
 const container = document.getElementById("root");
