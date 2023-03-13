@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneClass.MAUIApp.View.Components.TodoElementView">
+    <!-- a line with icon on the left, a title and bellow it a subtitle in the center, and a date with a time bellow it in the right -->
+    <StackLayout Orientation="Horizontal" Spacing="10">
+        <Image Source="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg" HeightRequest="50" WidthRequest="50" Aspect="AspectFill" />
+        <StackLayout Orientation="Vertical" Spacing="0">
+            <Label Text="Title" FontSize="Medium" />
+            <Label Text="Subtitle"  />
+        </StackLayout>
+        <StackLayout Orientation="Vertical" Spacing="0">
+            <Label Text="Date"  HorizontalOptions="EndAndExpand" />
+            <Label Text="Time"  HorizontalOptions="EndAndExpand" />
+        </StackLayout>
+    </StackLayout>
+</ContentView>
