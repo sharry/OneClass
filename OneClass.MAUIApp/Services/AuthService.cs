@@ -1,11 +1,12 @@
 ﻿using Microsoft.Identity.Client;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OneClass.MAUIApp.Services;
 public sealed class AuthService
 {
 	public IPublicClientApplication IdentityClient { get; set; }
-	public async Task<string> GetAuthenticationToken()
+	public async Task<AuthResult> GetAuthenticationToken()
 	{
 		if (IdentityClient is null)
 		{
@@ -61,6 +62,16 @@ public sealed class AuthService
 				Debug.WriteLine($"MSAL Interactive Error: {ex.Message}");
 			}
 		}
-		return result?.AccessToken ?? string.Empty;
+		if (result is null)
+		{
+			return default;
+		}
+		var idToken = new JwtSecurityToken(result.IdToken);
+		return new AuthResult(result.AccessToken, idToken.Payload.Exp.Value);
 	}
 }
+
+public sealed record AuthResult(
+	string AccessToken,
+	int Exp
+);
