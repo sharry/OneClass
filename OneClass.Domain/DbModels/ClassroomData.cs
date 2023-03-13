@@ -7,4 +7,5 @@ public class ClassroomData {
     public string Image { get; set; }
     public string TeacherId { get; set; }
     public string[] StudentIds { get; set; }
+    public string JoinCode { get; set; }
 }

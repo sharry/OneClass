@@ -1,5 +1,6 @@
 using Carter;
 using Marten;
+using Microsoft.AspNetCore.Mvc;
 using OneClass.Domain.DbModels;
 using OneClass.WebAPI.Services;
 
@@ -72,9 +73,14 @@ public class ClassroomModule : ICarterModule
                 classRoomData.Id = Guid.NewGuid().ToString();
                 classRoomData.TeacherId = user.Id;
                 classRoomData.StudentIds = Array.Empty<string>();
-
+                classRoomData.JoinCode = Guid.NewGuid().ToString("N").Substring(0, 6);
                 session.Store(classRoomData);
+
+                user.JoinClass(classRoomData.Id, "Teacher");
+                session.Store(user);
+
                 session.SaveChanges();
+
                 return Results.Ok(classRoomData);
             }
         );
@@ -141,6 +147,44 @@ public class ClassroomModule : ICarterModule
                 session.SaveChanges();
 
                 return Results.Ok();
+            }
+        );
+
+        app.MapPost(
+            "/api/classrooms/join",
+            (
+                [FromBody] dynamic request,
+                IDocumentSession session,
+                HttpContext context,
+                IUserService userService,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var user = userService.GetAuthenticatedUserAsync(context, cancellationToken).Result;
+                string joinCode = request.GetProperty("code").GetString();
+                var classroom = session
+                    .Query<ClassroomData>()
+                    .FirstOrDefault(x => x.JoinCode == joinCode);
+
+                if (classroom is null)
+                {
+                    return Results.NotFound();
+                }
+
+                if (classroom.StudentIds.Any(x => x == user.Id))
+                {
+                    return Results.Ok(classroom);
+                }
+
+                classroom.StudentIds = classroom.StudentIds.Append(user.Id).ToArray();
+                session.Store(classroom);
+
+                user.JoinClass(classroom.Id, "Student");
+                session.Store(user);
+
+                session.SaveChanges();
+
+                return Results.Ok(classroom);
             }
         );
     }
