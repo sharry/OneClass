@@ -14,15 +14,17 @@ public class UserModule : ICarterModule
 			async (
 				IDocumentSession session,
 				HttpContext context,
+				IAccessTokenService atService,
 				IUserService userService,
 				CancellationToken cancellationToken) =>
 			{
+			var accessToken = atService.GetAccessToken(context);
 			UserData user;
 			try
 			{
-				user = await userService.GetAuthenticatedUserAsync(context, cancellationToken);
+				user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				return Results.Unauthorized();
 			}

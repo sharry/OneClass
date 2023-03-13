@@ -46,6 +46,6 @@ public sealed class UserData
 }
 
 public record JoinedClass(
-	string ClassId,
+	string ClassroomId,
 	string Role
 );
