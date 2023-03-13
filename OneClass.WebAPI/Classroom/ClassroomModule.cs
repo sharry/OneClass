@@ -66,7 +66,8 @@ public class ClassroomModule : ICarterModule
                 IDocumentSession session,
                 HttpContext context,
                 IUserService userService,
-                CancellationToken cancellationToken
+                CancellationToken cancellationToken,
+                IOneDriveService oneDriveService
             ) =>
             {
                 var user = userService.GetAuthenticatedUserAsync(context, cancellationToken).Result;
@@ -74,11 +75,14 @@ public class ClassroomModule : ICarterModule
                 classRoomData.TeacherId = user.Id;
                 classRoomData.StudentIds = Array.Empty<string>();
                 classRoomData.JoinCode = Guid.NewGuid().ToString("N").Substring(0, 6);
-                session.Store(classRoomData);
+
+                var folder = oneDriveService.CreateClassroomFolderAsync(context, classRoomData, cancellationToken).Result;
+                classRoomData.OneDriveFolderId = folder.Id;
 
                 user.JoinClass(classRoomData.Id, "Teacher");
-                session.Store(user);
 
+                session.Store(classRoomData);
+                session.Store(user);
                 session.SaveChanges();
 
                 return Results.Ok(classRoomData);
