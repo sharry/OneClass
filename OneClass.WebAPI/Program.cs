@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IOneDriveService, OneDriveService>();
 builder.Services.AddSingleton<IAccessTokenService, AccessTokenService>();
+builder.Services.AddSingleton<IStorage, AzureBlobStorage>();
 
 builder.Services.AddMarten(config =>
 {

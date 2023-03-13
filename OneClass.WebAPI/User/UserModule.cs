@@ -47,6 +47,7 @@ public class UserModule : ICarterModule
 		app.MapGet("/api/users/me/photo", async (
 			HttpContext context,
 			CancellationToken cancellationToken,
+			IStorage storage,
 			IAccessTokenService atService) =>
 		{
 			var token = atService.GetAccessToken(context);
