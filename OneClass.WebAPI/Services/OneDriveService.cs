@@ -100,4 +100,49 @@ public class OneDriveService : IOneDriveService
     {
         return await CreateFolderAsync(context, "OneClass", "root", cancellationToken);
     }
+
+    public async void ShareFolderAsync(
+        HttpContext context,
+        string folderId,
+        string[] userEmails,
+        CancellationToken cancellationToken
+    )
+    {
+        var token = _accessTokenService.GetAccessToken(context);
+        if (token is null)
+        {
+            throw new Exception("Unauthorized");
+        }
+
+        Recipient[] recipients = userEmails.Select(x => new Recipient(x)).ToArray();
+        var driveItemInvitation = new DriveItemInvitation(
+            new[] { "write" },
+            recipients
+        );
+
+        var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            token
+        );
+
+        var response = await httpClient.PostAsync(
+            $"https://graph.microsoft.com/v1.0/me/drive/items/{folderId}/invite",
+            new StringContent(
+                JsonSerializer.Serialize(
+                    driveItemInvitation,
+                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
+                ),
+                Encoding.UTF8,
+                "application/json"
+            ),
+            cancellationToken
+        );
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+            throw new Exception("Bad Request");
+        }
+    }
 }

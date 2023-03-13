@@ -22,4 +22,11 @@ public interface IOneDriveService
         HttpContext context,
         CancellationToken cancellationToken
     );
+
+    public void ShareFolderAsync(
+        HttpContext context,
+        string folderId,
+        string[] userEmails,
+        CancellationToken cancellationToken
+    );
 }
