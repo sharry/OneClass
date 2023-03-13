@@ -90,5 +90,40 @@ public class AssignmentModule : ICarterModule
 					cancellationToken);
 			return Results.Ok(classroomAssignment);
 		});
+		app.MapDelete("/api/classrooms/{classroomId}/assignments/{assignmentId}",
+			async (
+				HttpContext context,
+				IUserService userService,
+				IDocumentSession session,
+				CancellationToken cancellationToken,
+				string classroomId,
+				string assignmentId) =>
+			{
+				var accessToken = _accessTokenService.GetAccessToken(context);
+				var user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+				var classroom = await session
+					.Query<ClassroomData>()
+					.Where(x => x.Id == classroomId)
+					.FirstOrDefaultAsync(token: cancellationToken);
+				if (classroom is null)
+				{
+					return Results.NotFound();
+				}
+				if (classroom.TeacherId != user.Id)
+				{
+					
+				}
+				var assignment = await session
+					.Query<ClassroomAssignment>()
+					.Where(x => x.Id == assignmentId)
+					.FirstOrDefaultAsync(token: cancellationToken);
+				if (assignment is null)
+				{
+					return Results.NotFound();
+				}
+				session.Delete(assignment);
+				await session.SaveChangesAsync(cancellationToken);
+				return Results.Ok();
+			});
 	}
 }

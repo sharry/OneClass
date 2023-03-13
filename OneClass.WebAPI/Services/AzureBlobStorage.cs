@@ -19,4 +19,11 @@ public class AzureBlobStorage : IStorage
 			new BlobClient(StorageConnectionString, "attachments", path);
 		await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
 	}
+	public async Task<Stream> DownloadAsync(string path, CancellationToken cancellationToken = default)
+	{
+		var blobClient = 
+			new BlobClient(StorageConnectionString, "attachments", path);
+		var response = await blobClient.DownloadAsync(cancellationToken: cancellationToken);
+		return response.Value.Content;
+	}
 }
