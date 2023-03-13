@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# React 
+
+
+node_modules
+dist/
+.env
+.DS_Store
+coverage/
+.vscode/
+.idea

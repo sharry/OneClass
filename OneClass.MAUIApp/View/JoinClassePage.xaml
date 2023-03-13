@@ -67,7 +67,7 @@
             />
         <!--button-->
         <Button
-            Text="Create"
+            Text="Creat"
 Padding="18,8"
             HorizontalOptions="Center"
             VerticalOptions="Center"

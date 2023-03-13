@@ -8,7 +8,7 @@
     <HorizontalStackLayout 
         Spacing="10"
         HorizontalOptions="CenterAndExpand"
-        VerticalOptions="CenterAndExpand">
+        VerticalOptions="StartAndExpand">
         <Button CornerRadius="25"  Text="Assigned" BorderWidth="1"  BackgroundColor="{x:StaticResource Tertiary}"
                 WidthRequest="100"/>
         <Button CornerRadius="25" Text="Missing" BackgroundColor="{x:StaticResource WhiteSmoke}" TextColor="Black" BorderWidth="1" BorderColor="DarkGray"  WidthRequest="100"/>
