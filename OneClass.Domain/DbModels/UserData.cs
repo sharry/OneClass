@@ -11,6 +11,7 @@ public sealed class UserData
 	public string Surname { get; set; }
 	public string DisplayName { get; set; }
 	public string EmailAddress { get; set; }
+	public string OneClassRootFolderId { get; set; }
 	public JoinedClass[] JoinedClasses { get; set; }
 	public UserData(
 		string id,
@@ -18,6 +19,7 @@ public sealed class UserData
 		string surname,
 		string displayName,
 		string emailAddress,
+		string oneClassRootFolderId,
 		List<JoinedClass> joinedClasses
 	)
 	{
@@ -26,6 +28,7 @@ public sealed class UserData
 		Surname = surname;
 		DisplayName = displayName;
 		EmailAddress = emailAddress;
+		OneClassRootFolderId = oneClassRootFolderId;
 		JoinedClasses = joinedClasses.ToArray();
 	}
 	public static UserData FromMe(Me me)
@@ -36,6 +39,7 @@ public sealed class UserData
 			me.Surname,
 			me.DisplayName,
 			me.UserPrincipalName,
+			string.Empty,
 			new List<JoinedClass>()
 		);
 	}
@@ -46,6 +50,6 @@ public sealed class UserData
 }
 
 public record JoinedClass(
-	string ClassId,
+	string ClassroomId,
 	string Role
 );

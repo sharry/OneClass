@@ -14,15 +14,18 @@ public class UserModule : ICarterModule
 			async (
 				IDocumentSession session,
 				HttpContext context,
+				IAccessTokenService atService,
 				IUserService userService,
-				CancellationToken cancellationToken) =>
+				CancellationToken cancellationToken,
+				IOneDriveService oneDriveService) =>
 			{
+			var accessToken = atService.GetAccessToken(context);
 			UserData user;
 			try
 			{
-				user = await userService.GetAuthenticatedUserAsync(context, cancellationToken);
+				user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				return Results.Unauthorized();
 			}
@@ -33,6 +36,10 @@ public class UserModule : ICarterModule
 			{
 				return Results.Ok(existingUser); 
 			}
+
+			var folder = await oneDriveService.CreateOneClassRootFolderAsync(context, cancellationToken);
+			
+			user.OneClassRootFolderId = folder.Id;
 			session.Store(user);
 			await session.SaveChangesAsync(cancellationToken);
 			return Results.Ok(user);
@@ -40,6 +47,7 @@ public class UserModule : ICarterModule
 		app.MapGet("/api/users/me/photo", async (
 			HttpContext context,
 			CancellationToken cancellationToken,
+			IStorage storage,
 			IAccessTokenService atService) =>
 		{
 			var token = atService.GetAccessToken(context);
