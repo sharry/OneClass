@@ -2,7 +2,7 @@ namespace OneClass.Domain.DbModels;
 
 public enum AssignmentStatus
 {
-	Draft,
+	// Draft,
 	Assigned,
 	Missing,
 	Done,
