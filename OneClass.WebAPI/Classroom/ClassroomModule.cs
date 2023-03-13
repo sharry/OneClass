@@ -86,7 +86,7 @@ public class ClassroomModule : ICarterModule
                 user.JoinClass(classRoomData.Id, "Teacher");
                 session.Store(user);
 
-                session.SaveChanges();
+                await session.SaveChangesAsync(cancellationToken);
 
                 return Results.Ok(classRoomData);
             }
@@ -163,15 +163,17 @@ public class ClassroomModule : ICarterModule
 
         app.MapPost(
             "/api/classrooms/join",
-            (
+            async (
                 [FromBody] dynamic request,
                 IDocumentSession session,
                 HttpContext context,
+                IAccessTokenService atService,
                 IUserService userService,
                 CancellationToken cancellationToken
             ) =>
             {
-                var user = userService.GetAuthenticatedUserAsync(context, cancellationToken).Result;
+                var token = atService.GetAccessToken(context);
+                var user = await userService.GetAuthenticatedUserAsync(token, cancellationToken);
                 string joinCode = request.GetProperty("code").GetString();
                 var classroom = session
                     .Query<ClassroomData>()
@@ -193,7 +195,7 @@ public class ClassroomModule : ICarterModule
                 user.JoinClass(classroom.Id, "Student");
                 session.Store(user);
 
-                session.SaveChanges();
+                await session.SaveChangesAsync(cancellationToken);
 
                 return Results.Ok(classroom);
             }

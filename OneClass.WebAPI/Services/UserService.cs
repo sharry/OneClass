@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using Marten;
 using OneClass.Domain.DbModels;
 using OneClass.Domain.GraphModels;
 
@@ -6,12 +7,10 @@ namespace OneClass.WebAPI.Services;
 
 public class UserService : IUserService
 {
-    private readonly IAccessTokenService _accessTokenService;
     private readonly IDocumentSession _session;
 
     public UserService(IAccessTokenService accessTokenService, IDocumentSession session)
     {
-        _accessTokenService = accessTokenService;
         _session = session;
     }
 
@@ -27,7 +26,7 @@ public class UserService : IUserService
         var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
             "Bearer",
-            token
+            accessToken
         );
         var response = await httpClient.GetAsync(
             "https://graph.microsoft.com/v1.0/me",
@@ -47,11 +46,6 @@ public class UserService : IUserService
             .Query<UserData>()
             .FirstOrDefaultAsync(x => x.Id == me.Id, cancellationToken);
 
-        if (user is null)
-        {
-            return UserData.FromMe(me);
-        }
-
-        return user;
+        return user ?? UserData.FromMe(me);
     }
 }
