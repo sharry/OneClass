@@ -15,7 +15,8 @@ public class UserModule : ICarterModule
 				IDocumentSession session,
 				HttpContext context,
 				IUserService userService,
-				CancellationToken cancellationToken) =>
+				CancellationToken cancellationToken,
+				IOneDriveService oneDriveService) =>
 			{
 			UserData user;
 			try
@@ -33,6 +34,10 @@ public class UserModule : ICarterModule
 			{
 				return Results.Ok(existingUser); 
 			}
+
+			var folder = await oneDriveService.CreateOneClassRootFolderAsync(context, cancellationToken);
+			
+			user.OneClassRootFolderId = folder.Id;
 			session.Store(user);
 			await session.SaveChangesAsync(cancellationToken);
 			return Results.Ok(user);
