@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import React from "react";
 function CourseCard({ name, subject, teacher, students, todos }) {
   return (
-    <div className="bg-gradient-to-r from-violet-500 to-fuchsia-500 m-2 rounded-2xl py-4 px-8 text-white">
+    <div className={`bg-[url('../assets/Group.svg')] bg-no-repeat bg-cover m-2 rounded-2xl py-4 px-8 text-white`} >
       {/* Upper Div */}
       <div className="flex justify-between items-start mb-10">
         <div className="mt-5">
