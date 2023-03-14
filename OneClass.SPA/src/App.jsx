@@ -15,6 +15,8 @@ import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "./config/msalConfig";
 import Assignement from "./pages/Assignement";
+import AssignmentContent from "./pages/AssignementContent";
+import Members from "./pages/Members";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -44,6 +46,8 @@ const App = () => {
                         <Route path="/classrources" element={<ClassRessources/>}/>
                         <Route path="/classrources/classcontent" element={<ClassResourcesContent/>}/>
                         <Route path="/classrources/assignment" element={<Assignement/>}/>
+                        <Route path="/classrources/members" element={<Members/>}/>
+                        <Route path="/assignmentcontent" element={<AssignmentContent/>}/>
                         
                     </Routes>
                 </OneClassContext.Provider>

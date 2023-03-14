@@ -14,7 +14,7 @@ function Assignement(){
             <Link to="assignment">Assignments</Link>
         </button>
         <button className="py-3 px-6 bg-green-600 text-white rounded-3xl my-6">
-          Members
+        <Link to="/classrources/members">Members</Link>
         </button>
       </div>
         <TodoCard/>
