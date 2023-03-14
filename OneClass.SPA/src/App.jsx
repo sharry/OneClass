@@ -4,6 +4,7 @@ import ClassList from "./components/ClassList";
 import OneClassContext from "./context/OneClassContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Link, BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 
 
 const queryClient = new QueryClient({
@@ -23,11 +24,9 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
                 <OneClassContext.Provider value={loggedUser}>
                     <heOneClassContexter>
-                        <Link to="/">OneClass</Link>
                     </heOneClassContexter>
                     <Routes>
-                        <Route path="/classes" element={<ClassList />} />
-                        <Route path="/" element={<ClassList />} />
+                        <Route path="/" element={<Home/>}/>
                     </Routes>
                 </OneClassContext.Provider>
             </QueryClientProvider>
