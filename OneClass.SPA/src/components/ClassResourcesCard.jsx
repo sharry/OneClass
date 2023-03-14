@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Moment from "react-moment";
 
 function ClassRessourcesCard({ teacher, dateTime, content, attchementsNbr }) {
   return (
@@ -19,9 +18,7 @@ function ClassRessourcesCard({ teacher, dateTime, content, attchementsNbr }) {
                 <div className=""></div>
               </div>
             </h3>
-            <p>
-              <Moment fromNow>{dateTime}</Moment>
-            </p>
+            <p>2 days ago</p>
           </div>
         </div>
         <p className="text-xl px-6 py-2">{content}</p>
