@@ -113,7 +113,7 @@ function Home() {
   return (
     <div className="h-full">
       <Navbar />
-      <div className="">
+      <div className="pb-20">
         {Classes.map((course) => (
           <CourseCard key={course.id} name={course.name} teacher={course.teacher} subject={course.subject} todos={course.todos} students={course.students} image={course.image} />
         ))}
