@@ -10,6 +10,7 @@ builder.Services.AddSingleton<IDriveService, DriveService>();
 builder.Services.AddSingleton<IAccessTokenService, AccessTokenService>();
 builder.Services.AddSingleton<IStorage, AzureBlobStorage>();
 builder.Services.AddSingleton<NewResourceNotificationService, NewResourceNotificationService>();
+builder.Services.AddSingleton<ITodoService, TodoService>();
 
 builder.Services.AddMarten(config =>
 {
