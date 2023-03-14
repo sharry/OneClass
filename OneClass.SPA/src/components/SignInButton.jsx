@@ -19,7 +19,7 @@ export const SignInButton = ({ loginType }) => {
 	return (
 		<button type="button" onClick={
 			() => handleLogin(loginType) }>
-			Sign in using Popup
+			Sign in
 		</button>
 	);
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import Navbar from "../components/Navbar";
 import BottomTabs from "../components/BottomTabs"
 import CourseCard from "../components/CourseCard";
