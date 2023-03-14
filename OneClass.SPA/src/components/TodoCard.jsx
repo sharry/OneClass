@@ -1,5 +1,5 @@
 import React from "react";
-function TodoCard() {
+function TodoCard({ id, title, classroom, date, time, status }) {
 	return (
 		<>
 			<div className="flex justify-around items-center py-2 border-b-2 mx-2">
