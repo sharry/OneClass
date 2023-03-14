@@ -2,16 +2,14 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import OneClassContext from "./context/OneClassContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Link, BrowserRouter, Routes, Route } from "react-router-dom";
-import { PublicClientApplication } from "@azure/msal-browser";
-import { MsalProvider } from "@azure/msal-react";
-import { msalConfig } from "./config/msalConfig";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import ToDo from "./pages/ToDo";
 import NotificationPage from "./pages/NotificationPage";
 import CreateClass from "./pages/CreateClass";
-
-const msalInstance = new PublicClientApplication(msalConfig);
+import { MsalProvider } from "@azure/msal-react";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { msalConfig } from "./config/msalConfig";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -24,7 +22,8 @@ const queryClient = new QueryClient({
 
 const App = () => {
     const loggedUser = useState(null);
-    return (
+	const msalInstance = new PublicClientApplication(msalConfig);
+	return (
         <React.StrictMode>
             <MsalProvider instance={msalInstance}>
                 <BrowserRouter>
