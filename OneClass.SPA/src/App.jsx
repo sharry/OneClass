@@ -9,6 +9,8 @@ import { msalConfig } from "./config/msalConfig";
 import Home from "./pages/Home";
 import ToDo from "./pages/ToDo";
 import NotificationPage from "./pages/NotificationPage";
+import ClassRessources from "./pages/ClassResources";
+import ClassResourcesContent from "./pages/ClassRessourcesContent";
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -33,6 +35,9 @@ const App = () => {
                         <Route path="/" element={<Home/>}/>
                         <Route path="/todo" element={<ToDo/>}/>
                         <Route path="/notification" element={<NotificationPage/>}/>
+                        <Route path="/classrources" element={<ClassRessources/>}/>
+                        <Route path="/classrources/classcontent" element={<ClassResourcesContent/>}/>
+                        
                     </Routes>
                 </OneClassContext.Provider>
             </QueryClientProvider>
