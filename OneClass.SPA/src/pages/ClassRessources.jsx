@@ -54,7 +54,7 @@ function ClassRessources() {
   return (
     <RequireAuth>
       <Navbar />
-      <RessourcesNavigator active="content" />
+      <RessourcesNavigator active="content" id={id} />
       {contentList.map((content) => (
         <ClassRessourcesCard
           key={content.id}
