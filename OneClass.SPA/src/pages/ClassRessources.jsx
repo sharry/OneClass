@@ -7,38 +7,38 @@ import { useParams } from "react-router-dom";
 import { getClassResources } from "../api/class";
 import { useQuery } from "@tanstack/react-query";
 // id, teacher, dateTime, content, attchementsNbr;
-// const contentList = [
-//   {
-//     id: 1,
-//     teacher: {
-//       name: "Elkhiat Brahim",
-//       image: "https://source.unsplash.com/100x100/?portrait",
-//     },
-//     dateTime: "2021-05-20 12:00:00",
-//     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-//     attchementsNbr: 2,
-//   },
-//   {
-//     id: 2,
-//     teacher: {
-//       name: "Elkhiat Brahim",
-//       image: "https://source.unsplash.com/100x100/?portrait",
-//     },
-//     dateTime: "2021-05-20 12:00:00",
-//     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-//     attchementsNbr: 2,
-//   },
-//   {
-//     id: 3,
-//     teacher: {
-//       name: "Elkhiat Brahim",
-//       image: "https://source.unsplash.com/100x100/?portrait",
-//     },
-//     dateTime: "2021-05-20 12:00:00",
-//     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-//     attchementsNbr: 0,
-//   },
-// ];
+const contentList = [
+  {
+    id: 1,
+    teacher: {
+      name: "Elkhiat Brahim",
+      image: "https://source.unsplash.com/100x100/?portrait",
+    },
+    dateTime: "2021-05-20 12:00:00",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    attchementsNbr: 2,
+  },
+  {
+    id: 2,
+    teacher: {
+      name: "Elkhiat Brahim",
+      image: "https://source.unsplash.com/100x100/?portrait",
+    },
+    dateTime: "2021-05-20 12:00:00",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    attchementsNbr: 2,
+  },
+  {
+    id: 3,
+    teacher: {
+      name: "Elkhiat Brahim",
+      image: "https://source.unsplash.com/100x100/?portrait",
+    },
+    dateTime: "2021-05-20 12:00:00",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    attchementsNbr: 0,
+  },
+];
 
 function ClassRessources() {
   const { id } = useParams();
