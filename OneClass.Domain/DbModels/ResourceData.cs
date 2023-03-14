@@ -22,6 +22,16 @@ public class ResourceData
             Attachments = Attachments.Append(attachment).ToArray();
         }
     }
+
+    public void RemoveAttachment(string attachmentId)
+    {
+        if (Attachments == null)
+        {
+            return;
+        }
+
+        Attachments = Attachments.Where(a => a.Id != attachmentId).ToArray();
+    }
 }
 
 public record Teacher
