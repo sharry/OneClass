@@ -173,7 +173,8 @@ public class AssignmentModule : ICarterModule
 						assignment.Title,
 						assignment.Content,
 						assignment.DueDate,
-						todoListId, 
+						assignment.HasDueDate,
+						todoListId,
 						cancellationToken
 					);
 				}

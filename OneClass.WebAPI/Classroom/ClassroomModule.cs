@@ -21,7 +21,10 @@ public class ClassroomModule : ICarterModule
             ) =>
             {
                 var accessToken = atService.GetAccessToken(context);
-                var user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+                var user = await userService.GetAuthenticatedUserAsync(
+                    accessToken,
+                    cancellationToken
+                );
                 var classrooms = await session
                     .Query<ClassroomData>()
                     .ToListAsync(cancellationToken);
@@ -44,7 +47,10 @@ public class ClassroomModule : ICarterModule
             ) =>
             {
                 var accessToken = atService.GetAccessToken(context);
-                var user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+                var user = await userService.GetAuthenticatedUserAsync(
+                    accessToken,
+                    cancellationToken
+                );
                 var classroom = await session
                     .Query<ClassroomData>()
                     .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
@@ -63,6 +69,48 @@ public class ClassroomModule : ICarterModule
             }
         );
 
+        app.MapGet(
+            "/api/classrooms/{id}/members",
+            async (
+                string id,
+                IDocumentSession session,
+                HttpContext context,
+                IAccessTokenService atService,
+                IUserService userService,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var accessToken = atService.GetAccessToken(context);
+                var user = await userService.GetAuthenticatedUserAsync(
+                    accessToken,
+                    cancellationToken
+                );
+                var classroom = await session
+                    .Query<ClassroomData>()
+                    .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+                if (classroom is null)
+                {
+                    return Results.NotFound();
+                }
+
+                if (classroom.TeacherId != user.Id && classroom.StudentIds.All(x => x != user.Id))
+                {
+                    return Results.Unauthorized();
+                }
+
+                var teacher = await session
+                    .Query<UserData>()
+                    .FirstOrDefaultAsync(x => x.Id == classroom.TeacherId, cancellationToken);
+                var students = await session
+                    .Query<UserData>()
+                    .Where(x => x.JoinedClasses.Any(y => y.ClassroomId == classroom.Id))
+                    .ToListAsync(cancellationToken);
+
+                return Results.Ok(new { teacher, students });
+            }
+        );
+
         app.MapPost(
             "/api/classrooms",
             async (
@@ -72,17 +120,22 @@ public class ClassroomModule : ICarterModule
                 IAccessTokenService atService,
                 IUserService userService,
                 CancellationToken cancellationToken,
-                IOneDriveService oneDriveService
+                IDriveService oneDriveService
             ) =>
             {
                 var accessToken = atService.GetAccessToken(context);
-                var user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+                var user = await userService.GetAuthenticatedUserAsync(
+                    accessToken,
+                    cancellationToken
+                );
                 classRoomData.Id = Guid.NewGuid().ToString();
                 classRoomData.TeacherId = user.Id;
                 classRoomData.StudentIds = Array.Empty<string>();
                 classRoomData.JoinCode = Guid.NewGuid().ToString("N")[..6];
 
-                var folder = oneDriveService.CreateClassroomFolderAsync(context, classRoomData, cancellationToken).Result;
+                var folder = oneDriveService
+                    .CreateClassroomFolderAsync(context, classRoomData, cancellationToken)
+                    .Result;
                 classRoomData.OneDriveFolderId = folder.Id;
 
                 user.JoinClass(classRoomData.Id, "Teacher");
@@ -90,7 +143,6 @@ public class ClassroomModule : ICarterModule
                 session.Store(classRoomData);
                 session.Store(user);
                 await session.SaveChangesAsync(cancellationToken);
-
 
                 return Results.Ok(classRoomData);
             }
@@ -109,7 +161,10 @@ public class ClassroomModule : ICarterModule
             ) =>
             {
                 var accessToken = atService.GetAccessToken(context);
-                var user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+                var user = await userService.GetAuthenticatedUserAsync(
+                    accessToken,
+                    cancellationToken
+                );
                 var classroom = session.Query<ClassroomData>().FirstOrDefault(x => x.Id == id);
 
                 if (classroom is null)
@@ -145,7 +200,10 @@ public class ClassroomModule : ICarterModule
             ) =>
             {
                 var accessToken = atService.GetAccessToken(context);
-                var user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+                var user = await userService.GetAuthenticatedUserAsync(
+                    accessToken,
+                    cancellationToken
+                );
                 var classroom = session.Query<ClassroomData>().FirstOrDefault(x => x.Id == id);
 
                 if (classroom is null)

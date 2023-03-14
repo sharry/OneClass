@@ -3,7 +3,7 @@ using OneClass.Domain.GraphModels;
 
 namespace OneClass.WebAPI.Services;
 
-public interface IOneDriveService
+public interface IDriveService
 {
     public Task<DriveItem> CreateFolderAsync(
         HttpContext context,
@@ -17,15 +17,21 @@ public interface IOneDriveService
         ClassroomData classroom,
         CancellationToken cancellationToken
     );
-
+    public Task<DriveItem> UploadFileAsync(
+        string accessToken,
+        string onedriveFolderId,
+        Stream file,
+        string fileName,
+        CancellationToken cancellationToken = default
+    );
     public Task<DriveItem> CreateOneClassRootFolderAsync(
         HttpContext context,
         CancellationToken cancellationToken
     );
 
-    public void ShareFolderAsync(
+    public void ShareFileOrFolderAsync(
         HttpContext context,
-        string folderId,
+        string fileOfFolderId,
         string[] userEmails,
         CancellationToken cancellationToken
     );

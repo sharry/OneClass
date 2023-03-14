@@ -12,7 +12,7 @@ public record TodoTask (
 public record TodoTaskRequest(
     string Title,
     TodoTaskBody Body,
-    TodoTaskDueDate DueDateTime
+    TodoTaskDueDate? DueDateTime = null
 );
 
 

@@ -193,22 +193,22 @@ public class ResourceModule : ICarterModule
                 }
 
                 var file = context.Request.Form.Files[0];
-                string fileID = Guid.NewGuid().ToString();
-                string fileName = fileID + Path.GetExtension(file.FileName);
+                var fileId = Guid.NewGuid().ToString();
+                var fileName = fileId + Path.GetExtension(file.FileName);
 
                 await storage.UploadAsync(file.OpenReadStream(), fileName, cancellationToken);
 
-                AttachedFile attachment = new AttachedFile(
-                    fileID,
+                var attachment = new AttachedFile(
+                    fileId,
                     file.ContentType,
                     fileName,
-                    $"https://onelass-backend.azurewebsites.net/api/resources/{resourceId}/attachments/{fileID}",
+                    $"https://onelass-backend.azurewebsites.net/api/resources/{resourceId}/attachments/{fileId}",
                     file.Length
                 );
 
                 resource.AddAttachment(attachment);
                 session.Store(resource);
-                session.SaveChanges();
+                await session.SaveChangesAsync(cancellationToken);
 
                 return Results.Ok(resource);
             }

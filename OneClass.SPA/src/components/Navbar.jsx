@@ -66,7 +66,7 @@ function Navbar(){
               </a>
             </li>
             <li className="flex">
-              <SignOutButton />
+              <SignOutButton logoutType="popup" />
             </li>
           </ul>
         </div>

@@ -6,7 +6,7 @@ using OneClass.WebAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IOneDriveService, OneDriveService>();
+builder.Services.AddSingleton<IDriveService, DriveService>();
 builder.Services.AddSingleton<IAccessTokenService, AccessTokenService>();
 builder.Services.AddSingleton<IStorage, AzureBlobStorage>();
 builder.Services.AddSingleton<NewResourceNotificationService, NewResourceNotificationService>();

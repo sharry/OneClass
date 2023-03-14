@@ -78,6 +78,7 @@ public class TodoService : ITodoService
         string title,
         string content,
         string dueDate,
+        bool hasDueDate,
         string listId,
         CancellationToken cancellationToken
     )
@@ -91,7 +92,7 @@ public class TodoService : ITodoService
         var todoTask = new TodoTaskRequest(
             title,
             new TodoTaskBody(content),
-            new TodoTaskDueDate(dueDate)
+            hasDueDate ? new TodoTaskDueDate(dueDate) : null
         );
 
         var httpClient = new HttpClient();
