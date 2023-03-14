@@ -1,10 +1,11 @@
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 import MemberCard from "../components/MemberCard";
+import RequireAuth from "../components/RequireAuth";
 
 function Members() {
   return (
-    <>
+    <RequireAuth>
       <Navbar />
       <div className="grid grid-cols-3 gap-4
        justify-around w-full px-7">
@@ -36,7 +37,7 @@ function Members() {
       
       </div>
       
-    </>
+    </RequireAuth>
   );
 }
 

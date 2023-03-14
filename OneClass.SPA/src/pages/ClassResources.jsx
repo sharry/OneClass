@@ -2,12 +2,13 @@ import BottomTabs from "../components/BottomTabs";
 import Navbar from "../components/Navbar";
 import ClassRessourcesCard from "../components/ClassResourcesCard";
 import { Link } from "react-router-dom";
+import RequireAuth from "../components/RequireAuth";
 
 BottomTabs;
 
 function ClassRessources() {
   return (
-    <>
+    <RequireAuth>
       <Navbar />
       <div className="grid grid-cols-3 gap-4
        justify-around w-full px-7">
@@ -24,7 +25,7 @@ function ClassRessources() {
       <ClassRessourcesCard/>
       <ClassRessourcesCard/>
       <ClassRessourcesCard/>
-    </>
+    </RequireAuth>
   );
 }
 

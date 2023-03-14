@@ -1,9 +1,10 @@
 import Navbar from "../components/Navbar";
 import TodoCard from "../components/TodoCard";
 import { Link } from "react-router-dom";
+import RequireAuth from "../components/RequireAuth";
 
 function Assignement(){
-    return <>
+    return <RequireAuth>
     <Navbar/>
     <div className="grid grid-cols-3 gap-4
        justify-around w-full px-7">
@@ -21,7 +22,7 @@ function Assignement(){
         <TodoCard/>
         <TodoCard/>
         <TodoCard/>
-    </>
+    </RequireAuth>
 }
 
 export default Assignement;

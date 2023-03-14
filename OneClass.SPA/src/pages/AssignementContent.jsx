@@ -1,8 +1,9 @@
 import AttachementCard from "../components/AttachementCard";
 import Navbar from "../components/Navbar";
+import RequireAuth from "../components/RequireAuth";
 
 function AssignmentContent(){
-    return < >
+    return <RequireAuth>
         <Navbar/>
         <div className="mx-3">
         <h1 className="text-2xl mt-6 font-medium">Reading Activity - Properties</h1>
@@ -15,7 +16,7 @@ function AssignmentContent(){
              <AttachementCard/>
              <button className="bg-green-600 w-11/12 mx-auto block text-white py-2 rounded-lg mt-8">Add Work</button>
         </div>
-    </>
+    </RequireAuth>
 }
 
 export default AssignmentContent;

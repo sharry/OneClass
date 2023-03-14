@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import BottomTabs from "../components/BottomTabs"
 import CourseCard from "../components/CourseCard";
+import RequireAuth from "../components/RequireAuth";
 
 const Classes = [
   {
@@ -111,16 +112,18 @@ const Classes = [
 
 function Home() {
   return (
-    <div className="h-full">
-      <Navbar />
-      <div className="pb-20">
-        {Classes.map((course) => (
-          <CourseCard key={course.id} name={course.name} teacher={course.teacher} subject={course.subject} todos={course.todos} students={course.students} image={course.image} />
-        ))}
-      </div>
+    <RequireAuth>
+      <div className="h-full">
+        <Navbar />
+        <div className="pb-20">
+          {Classes.map((course) => (
+            <CourseCard key={course.id} name={course.name} teacher={course.teacher} subject={course.subject} todos={course.todos} students={course.students} image={course.image} />
+          ))}
+        </div>
 
-      <BottomTabs />
-    </div>
+        <BottomTabs />
+      </div>
+    </RequireAuth>
   );
 }
 
