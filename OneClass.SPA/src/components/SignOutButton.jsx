@@ -1,8 +1,11 @@
 import React from "react";
 import { useMsal } from "@azure/msal-react";
+import { useNavigate } from "react-router-dom";
 
 export const SignOutButton = ({ logoutType }) => {
 	const { instance } = useMsal();
+	const navigate = useNavigate();
+
 	const handleLogout = () => {
 		if (logoutType === "popup") {
 			instance.logoutPopup({
@@ -14,10 +17,12 @@ export const SignOutButton = ({ logoutType }) => {
 				postLogoutRedirectUri: "/",
 			}).catch(console.error);
 		}
+
+		navigate("/signin");
 	}
 	return (
 		<button
-			type="button" className="ml-auto" onClick={() => handleLogout()}>
+			type="button" className="bg-red-700 text-white px-10 py-2" onClick={() => handleLogout()}>
 			Sign out
 		</button>
 	);

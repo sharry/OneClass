@@ -1,9 +1,11 @@
 import React from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../config/msalConfig";
+import { useNavigate } from "react-router-dom";
 
 export const SignInButton = ({ loginType }) => {
 	const { instance } = useMsal();
+	const navigate = useNavigate();
 
 	const handleLogin = (loginType) => {
 		if (loginType === "popup") {
@@ -15,9 +17,11 @@ export const SignInButton = ({ loginType }) => {
 				console.log(e);
 			});
 		}
+
+		navigate("/");
 	}
 	return (
-		<button type="button" onClick={
+		<button type="button" className="bg-green-700 text-white px-10 py-2" onClick={
 			() => handleLogin(loginType) }>
 			Sign in
 		</button>
