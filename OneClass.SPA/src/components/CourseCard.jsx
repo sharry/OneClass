@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function CourseCard({ name, subject, teacher, students, todos }) {
+function CourseCard({ name, subject, teacher, students, todos, image }) {
   return (
     <div
-      className={`bg-[url('../assets/Group.svg')] bg-no-repeat bg-cover m-2 rounded-2xl py-4 px-8 text-white`}
+      className={`bg-[url('../assets/classrooms/${image}')] bg-no-repeat bg-cover m-2 rounded-2xl py-4 px-8 text-white`}
     >
       {/* Upper Div */}
       <div className="flex justify-between items-start mb-10">
@@ -26,19 +26,19 @@ function CourseCard({ name, subject, teacher, students, todos }) {
       <div className="flex justify-between">
         <div className="flex items-center space-x-2">
           <img
-            src={teacher.image}
+            src={teacher}
             alt="teacher avatar"
             className="object-cover object-center w-8 h-8 rounded-full shadow-sm border-white border-2"
           />
           <div className="-space-y-1">
             <h2 className="text-sm font-semibold leading-none">
-              {teacher.name}
+              {teacher}
             </h2>
           </div>
         </div>
         {/* Number of setudents and todos */}
         <div className="flex">
-          <span className="mx-1 font-medium">{students}</span>
+          <span className="mx-1 font-medium">{students.length}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

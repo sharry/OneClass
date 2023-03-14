@@ -1,3 +1,5 @@
+import axios from "../config/axiosConfig";
+
 // api for class
 
 // create a new class
@@ -14,4 +16,9 @@ export const createClass = async (title, description, subject, image) => {
     },
   });
   return response;
+};
+
+export const getClasses = async () => {
+  const response = await axios.get(`/classrooms`);
+  return response.data;
 };
