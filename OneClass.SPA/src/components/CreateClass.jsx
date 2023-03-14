@@ -1,1 +1,0 @@
-// this page is for teacher to create a class, it has an image in the top, with a botton on top ofupload function
