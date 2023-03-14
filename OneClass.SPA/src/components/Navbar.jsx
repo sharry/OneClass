@@ -1,3 +1,5 @@
+import React from "react";
+import { SignOutButton } from "./SignOutButton";
 function Navbar(){
     return <>
         <header className="p-4 shadow sticky top-0 bg-white">
@@ -62,6 +64,9 @@ function Navbar(){
               >
                 Link
               </a>
+            </li>
+            <li className="flex">
+              <SignOutButton />
             </li>
           </ul>
         </div>
