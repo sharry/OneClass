@@ -2,6 +2,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Marten;
+using Microsoft.Graph;
+using Microsoft.Kiota.Abstractions.Authentication;
 using OneClass.Domain.DbModels;
 using OneClass.Domain.GraphModels;
 
@@ -101,20 +103,11 @@ public class DriveService : IDriveService
             "Bearer",
             accessToken
         );
-        var response = await httpClient.PostAsync($"https://graph.microsoft.com/v1.0/me/drive/items/{onedriveFolderId}/children",
-            new StreamContent(file)
-            {
-                Headers =
-                {
-                    ContentType = new MediaTypeHeaderValue("application/octet-stream"),
-                    ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                    {
-                        FileName = fileName
-                    }
-                }
-            },
-            cancellationToken
-        );
+        var folderName =
+            await httpClient.GetAsync($"https://graph.microsoft.com/v1.0/me/drive/items/",
+                cancellationToken);
+        var response = await httpClient.PutAsync($"https://graph.microsoft.com/v1.0/me/drive/items/{onedriveFolderId}:/{fileName}:/content",
+        new StreamContent(file), cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception("Bad Request");
@@ -128,6 +121,7 @@ public class DriveService : IDriveService
         }
         return driveItem;
     }
+
     public async Task<DriveItem> CreateOneClassRootFolderAsync(
         HttpContext context,
         CancellationToken cancellationToken
