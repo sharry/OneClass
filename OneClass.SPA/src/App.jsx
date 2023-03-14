@@ -13,17 +13,16 @@ import NotificationPage from "./pages/NotificationPage";
 const msalInstance = new PublicClientApplication(msalConfig);
 
 const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            staleTime: 100000,
-            cacheTime: 100000,
-        },
-    },
+	defaultOptions: {
+		queries: {
+			staleTime: 100000,
+			cacheTime: 100000,
+		},
+	},
 });
 
 const App = () => {
-    const loggedUser = useState(null);
-
+	const loggedUser = useState(null);
     return (
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
