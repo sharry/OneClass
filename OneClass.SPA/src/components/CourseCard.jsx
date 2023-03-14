@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function CourseCard({ name, subject, teacher, students, todos, image }) {
+function CourseCard({ id, name, subject, teacher, students, todos, image }) {
   return (
     <div
       className={`bg-[url('../assets/classrooms/${image}')] bg-no-repeat bg-cover m-2 rounded-2xl py-4 px-8 text-white`}
@@ -9,7 +9,7 @@ function CourseCard({ name, subject, teacher, students, todos, image }) {
       {/* Upper Div */}
       <div className="flex justify-between items-start mb-10">
         <div className="mt-5">
-          <Link to="classrources">
+          <Link to={`classrources/${id}`}>
             <h1 className="font-medium text-3xl mb-3">{name}</h1>
           </Link>
           <p className="w-4/5">{subject}</p>
