@@ -127,11 +127,7 @@ public class ResourceModule : ICarterModule
                 }
 
                 resource.Id = Guid.NewGuid().ToString();
-                resource.Teacher = new Teacher
-                {
-                    Id = user.Id,
-                    Name = user.DisplayName
-                };
+                resource.Teacher = new Teacher { Id = user.Id, Name = user.DisplayName };
                 resource.ClassroomId = classroomId;
                 resource.CreatedAt = DateTime.UtcNow.ToString();
 
@@ -146,11 +142,11 @@ public class ResourceModule : ICarterModule
             "/api/resources/{resourceId}/attachments",
             async (
                 string resourceId,
-                AttachedFile attachment,
                 IDocumentSession session,
                 HttpContext context,
                 IAccessTokenService atService,
                 IUserService userService,
+                IStorage storage,
                 CancellationToken cancellationToken
             ) =>
             {
@@ -183,14 +179,136 @@ public class ResourceModule : ICarterModule
                     return Results.Unauthorized();
                 }
 
-                // TODO: Upload attachment to cloud storage
-                // ...
+                var file = context.Request.Form.Files[0];
+                string fileID = Guid.NewGuid().ToString();
+                string fileName = fileID + Path.GetExtension(file.FileName);
+
+                await storage.UploadAsync(file.OpenReadStream(), fileName, cancellationToken);
+
+                AttachedFile attachment = new AttachedFile(
+                    fileID,
+                    file.ContentType,
+                    fileName,
+                    $"https://onelass-backend.azurewebsites.net/api/resources/{resourceId}/attachments/{fileID}",
+                    file.Length
+                );
 
                 resource.AddAttachment(attachment);
                 session.Store(resource);
                 session.SaveChanges();
 
                 return Results.Ok(resource);
+            }
+        );
+
+        app.MapDelete(
+            "/api/resources/{resourceId}/attachments/{attachmentId}",
+            async (
+                string resourceId,
+                string attachmentId,
+                IDocumentSession session,
+                HttpContext context,
+                IAccessTokenService atService,
+                IUserService userService,
+                IStorage storage,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var accessToken = atService.GetAccessToken(context);
+                var user = await userService.GetAuthenticatedUserAsync(
+                    accessToken,
+                    cancellationToken
+                );
+
+                var resource = session
+                    .Query<ResourceData>()
+                    .FirstOrDefault(x => x.Id == resourceId);
+
+                if (resource is null)
+                {
+                    return Results.NotFound();
+                }
+
+                var classroom = session
+                    .Query<ClassroomData>()
+                    .FirstOrDefault(x => x.Id == resource.ClassroomId);
+
+                if (classroom is null)
+                {
+                    return Results.NotFound();
+                }
+
+                if (classroom.TeacherId != user.Id)
+                {
+                    return Results.Unauthorized();
+                }
+
+                var attachment = resource.Attachments.FirstOrDefault(x => x.Id == attachmentId);
+                if (attachment is null)
+                {
+                    return Results.NotFound();
+                }
+
+                await storage.DeleteAsync(attachment.FileName, cancellationToken);
+                resource.RemoveAttachment(attachmentId);
+
+                session.Store(resource);
+                session.SaveChanges();
+
+                return Results.Ok(resource);
+            }
+        );
+
+        app.MapGet(
+            "/api/resources/{resourceId}/attachments/{attachmentId}",
+            async (
+                string resourceId,
+                string attachmentId,
+                IDocumentSession session,
+                HttpContext context,
+                IAccessTokenService atService,
+                IUserService userService,
+                IStorage storage,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var accessToken = atService.GetAccessToken(context);
+                var user = await userService.GetAuthenticatedUserAsync(
+                    accessToken,
+                    cancellationToken
+                );
+
+                var resource = session
+                    .Query<ResourceData>()
+                    .FirstOrDefault(x => x.Id == resourceId);
+
+                if (resource is null)
+                {
+                    return Results.NotFound();
+                }
+
+                var classroom = session
+                    .Query<ClassroomData>()
+                    .FirstOrDefault(x => x.Id == resource.ClassroomId);
+
+                if (classroom is null)
+                {
+                    return Results.NotFound();
+                }
+
+                if (classroom.TeacherId != user.Id && classroom.StudentIds.All(x => x != user.Id))
+                {
+                    return Results.Unauthorized();
+                }
+
+                var attachment = resource.Attachments.FirstOrDefault(x => x.Id == attachmentId);
+                if (attachment is null)
+                {
+                    return Results.NotFound();
+                }
+
+                var file = await storage.DownloadAsync(attachment.FileName, cancellationToken);
+                return Results.File(file, attachment.MimeType, attachment.FileName);
             }
         );
 
@@ -255,10 +373,9 @@ public class ResourceModule : ICarterModule
             ) =>
             {
                 var accessToken = atService.GetAccessToken(context);
-                var user = userService.GetAuthenticatedUserAsync(
-                    accessToken,
-                    cancellationToken
-                ).Result;
+                var user = userService
+                    .GetAuthenticatedUserAsync(accessToken, cancellationToken)
+                    .Result;
 
                 var resource = session
                     .Query<ResourceData>()
