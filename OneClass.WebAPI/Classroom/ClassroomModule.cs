@@ -173,6 +173,7 @@ public class ClassroomModule : ICarterModule
                 HttpContext context,
                 IAccessTokenService atService,
                 IUserService userService,
+                ITodoService todoService,
                 CancellationToken cancellationToken
             ) =>
             {
@@ -196,12 +197,14 @@ public class ClassroomModule : ICarterModule
                 classroom.StudentIds = classroom.StudentIds.Append(user.Id).ToArray();
                 session.Store(classroom);
 
+                var todoList = await todoService.CreateTodoListAsync(context, $"OneClass : {classroom.Title}", cancellationToken);
                 user.JoinClass(classroom.Id, "Student");
+                user.AddTodoList(classroom.Id, todoList.Id);
                 session.Store(user);
 
                 await session.SaveChangesAsync(cancellationToken);
 
-                return Results.Ok(classroom);
+                return Results.Ok(user);
             }
         );
     }
