@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using Carter;
+﻿using Carter;
 using Marten;
 using OneClass.Domain.DbModels;
 using OneClass.WebAPI.Services;
@@ -15,20 +14,18 @@ public class UserModule : ICarterModule
 				IDocumentSession session,
 				HttpContext context,
 				IAccessTokenService atService,
-				IUserService userService,
 				CancellationToken cancellationToken,
 				IDriveService oneDriveService) =>
 			{
 			var accessToken = atService.GetAccessToken(context);
-			UserData user;
-			try
+			var client = new GraphServiceClientProvider()
+				.GetGraphServiceClient(accessToken);
+			var graphUser = await client.Me.GetAsync(cancellationToken: cancellationToken);
+			if (graphUser is null)
 			{
-				user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+				return Results.BadRequest();
 			}
-			catch (Exception)
-			{
-				return Results.Unauthorized();
-			}
+			UserData user = UserData.FromGraphUser(graphUser);
 			var existingUser = await session
 				.Query<UserData>()
 				.FirstOrDefaultAsync(x => x.Id == user.Id, cancellationToken);
@@ -51,16 +48,13 @@ public class UserModule : ICarterModule
 			IAccessTokenService atService) =>
 		{
 			var token = atService.GetAccessToken(context);
-			var httpClient = new HttpClient();
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-			var request = new HttpRequestMessage(HttpMethod.Get, 
-				"https://graph.microsoft.com/v1.0/me/photo/$value");
-			var response = await httpClient.SendAsync(request, cancellationToken);
-			if (!response.IsSuccessStatusCode)
+			var client = new GraphServiceClientProvider()
+				.GetGraphServiceClient(token);
+			var stream = await client.Me.Photo.Content.GetAsync(cancellationToken: cancellationToken);
+			if (stream is null)
 			{
-				return Results.Unauthorized();
+				return Results.NotFound();
 			}
-			var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 			return Results.Stream(stream, "image/png");
 		});
 	}
