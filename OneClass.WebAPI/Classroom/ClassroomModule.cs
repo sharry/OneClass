@@ -96,8 +96,35 @@ public class ClassroomModule : ICarterModule
                 {
                     return Results.Unauthorized();
                 }
-
-                return Results.Ok(classroom);
+                var teacher = await session
+                    .Query<UserData>()
+                    .FirstOrDefaultAsync(x => x.Id == classroom.TeacherId, cancellationToken);
+                var assignmentsCount = await session
+                    .Query<ClassroomAssignment>()
+                    .Where(x => x.ClassroomId == classroom.Id)
+                    .CountAsync(cancellationToken);
+                if (teacher is null)
+                {
+                    return Results.NotFound();
+                }
+                var classRoomResponse = new ClassroomResponse(
+                    classroom.Id,
+                    classroom.Title,
+                    classroom.Description,
+                    classroom.Image,
+                    new TeacherResponse(
+                        teacher.Id,
+                        teacher.GivenName,
+                        teacher.Surname,
+                        teacher.DisplayName,
+                        teacher.EmailAddress
+                    ),
+                    classroom.StudentIds,
+                    classroom.JoinCode,
+                    classroom.OneDriveFolderId,
+                    assignmentsCount
+                );
+                return Results.Ok(classRoomResponse);
             }
         );
 
