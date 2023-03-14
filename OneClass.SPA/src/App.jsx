@@ -3,10 +3,12 @@ import { createRoot } from "react-dom/client";
 import OneClassContext from "./context/OneClassContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Link, BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./config/msalConfig";
+import Home from "./pages/Home";
+import ToDo from "./pages/ToDo";
+import NotificationPage from "./pages/NotificationPage";
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -30,6 +32,8 @@ const App = () => {
                     </heOneClassContexter>
                     <Routes>
                         <Route path="/" element={<Home/>}/>
+                        <Route path="/todo" element={<ToDo/>}/>
+                        <Route path="/notification" element={<NotificationPage/>}/>
                     </Routes>
                 </OneClassContext.Provider>
             </QueryClientProvider>
