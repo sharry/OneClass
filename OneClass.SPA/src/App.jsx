@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import ToDo from "./pages/ToDo";
 import NotificationPage from "./pages/NotificationPage";
-import ClassRessources from "./pages/ClassResources";
+import ClassRessources from "./pages/ClassRessources";
 import ClassResourcesContent from "./pages/ClassRessourcesContent";
 
 const msalInstance = new PublicClientApplication(msalConfig);

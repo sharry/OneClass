@@ -5,7 +5,7 @@ import TodoCard from "../components/TodoCard";
 import RequireAuth from "../components/RequireAuth";
 
 
-function NotificationPage() {
+function NotificationPage({todos}) {
   return (
     <RequireAuth>
       <div className="h-full">
