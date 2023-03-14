@@ -9,16 +9,18 @@ export const SignInButton = ({ loginType }) => {
 
 	const handleLogin = (loginType) => {
 		if (loginType === "popup") {
-			instance.loginPopup(loginRequest).catch(e => {
+			instance.loginPopup(loginRequest).then((res) => {
+				navigate("/");
+			}).catch(e => {
 				console.log(e);
 			});
 		} else if (loginType === "redirect") {
-			instance.loginRedirect(loginRequest).catch(e => {
+			instance.loginRedirect(loginRequest).then((res) => {
+				navigate("/");
+			}).catch(e => {
 				console.log(e);
 			});
 		}
-
-		navigate("/");
 	}
 	return (
 		<button type="button" className="bg-green-700 text-white px-10 py-2" onClick={

@@ -22,10 +22,18 @@ builder.Services.AddMarten(config =>
 	config.Connection($"Host={host};Port={port};Database={database};Username={username};Password={password}");
 });
 
+builder.Services.AddCors();
 builder.Services.AddCarter();
 
 var app = builder.Build();
 
+app.UseCors(builder =>
+{
+	builder.AllowAnyOrigin();
+	builder.AllowAnyMethod();
+	builder.AllowAnyHeader();
+	builder.SetIsOriginAllowed((host) => true);
+});
 app.UseHttpsRedirection();
 
 app.MapGet("/",
