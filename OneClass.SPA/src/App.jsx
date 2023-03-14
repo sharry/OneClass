@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./config/msalConfig";
-import CreateClass from "./components/CreateClass";
+import CreateClass from "./pages/CreateClass";
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -33,7 +33,7 @@ const App = () => {
                                 <Link to="/">OneClass</Link>
                             </heOneClassContexter>
                             <Routes>
-                                <Route path="/" element={<ClassList />} />
+                                <Route path="/" element={<Home />} />
                                 <Route path="/create" element={<CreateClass />} />
                             </Routes>
                         </OneClassContext.Provider>
