@@ -14,30 +14,28 @@ import CreateClass from "./pages/CreateClass";
 const msalInstance = new PublicClientApplication(msalConfig);
 
 const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			staleTime: 100000,
-			cacheTime: 100000,
-		},
-	},
+    defaultOptions: {
+        queries: {
+            staleTime: 100000,
+            cacheTime: 100000,
+        },
+    },
 });
 
 const App = () => {
-	const loggedUser = useState(null);
+    const loggedUser = useState(null);
     return (
         <React.StrictMode>
             <MsalProvider instance={msalInstance}>
                 <BrowserRouter>
                     <QueryClientProvider client={queryClient}>
                         <OneClassContext.Provider value={loggedUser}>
-                            <heOneClassContexter>
-                                <Link to="/">OneClass</Link>
-                            </heOneClassContexter>
+
                             <Routes>
                                 <Route path="/" element={<Home />} />
                                 <Route path="/create" element={<CreateClass />} />
-                        <Route path="/todo" element={<ToDo/>}/>
-                        <Route path="/notification" element={<NotificationPage/>}/>
+                                <Route path="/todo" element={<ToDo />} />
+                                <Route path="/notification" element={<NotificationPage />} />
                             </Routes>
                         </OneClassContext.Provider>
                     </QueryClientProvider>
