@@ -7,13 +7,13 @@ using OneClass.Domain.GraphModels;
 
 namespace OneClass.WebAPI.Services;
 
-public class OneDriveService : IOneDriveService
+public class DriveService : IDriveService
 {
     private readonly IAccessTokenService _accessTokenService;
     private readonly IDocumentSession _session;
     private readonly IUserService _userService;
 
-    public OneDriveService(
+    public DriveService(
         IAccessTokenService accessTokenService,
         IDocumentSession session,
         IUserService userService
@@ -93,6 +93,41 @@ public class OneDriveService : IOneDriveService
         );
     }
 
+    public async Task<DriveItem> UploadFileAsync(string accessToken, string onedriveFolderId, Stream file,
+        string fileName, CancellationToken cancellationToken = default)
+    {
+        var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            accessToken
+        );
+        var response = await httpClient.PostAsync($"https://graph.microsoft.com/v1.0/me/drive/items/{onedriveFolderId}/children",
+            new StreamContent(file)
+            {
+                Headers =
+                {
+                    ContentType = new MediaTypeHeaderValue("application/octet-stream"),
+                    ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = fileName
+                    }
+                }
+            },
+            cancellationToken
+        );
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception("Bad Request");
+        }
+        var driveItem = await response.Content.ReadFromJsonAsync<DriveItem>(
+            cancellationToken: cancellationToken
+        );
+        if (driveItem is null)
+        {
+            throw new Exception("Bad Request");
+        }
+        return driveItem;
+    }
     public async Task<DriveItem> CreateOneClassRootFolderAsync(
         HttpContext context,
         CancellationToken cancellationToken
@@ -101,9 +136,9 @@ public class OneDriveService : IOneDriveService
         return await CreateFolderAsync(context, "OneClass", "root", cancellationToken);
     }
 
-    public async void ShareFolderAsync(
+    public async void ShareFileOrFolderAsync(
         HttpContext context,
-        string folderId,
+        string fileOfFolderId,
         string[] userEmails,
         CancellationToken cancellationToken
     )
@@ -114,7 +149,9 @@ public class OneDriveService : IOneDriveService
             throw new Exception("Unauthorized");
         }
 
-        Recipient[] recipients = userEmails.Select(x => new Recipient(x)).ToArray();
+        var recipients = userEmails
+            .Select(x => new Recipient(x))
+            .ToArray();
         var driveItemInvitation = new DriveItemInvitation(
             new[] { "write" },
             recipients
@@ -127,7 +164,7 @@ public class OneDriveService : IOneDriveService
         );
 
         var response = await httpClient.PostAsync(
-            $"https://graph.microsoft.com/v1.0/me/drive/items/{folderId}/invite",
+            $"https://graph.microsoft.com/v1.0/me/drive/items/{fileOfFolderId}/invite",
             new StringContent(
                 JsonSerializer.Serialize(
                     driveItemInvitation,
@@ -139,10 +176,8 @@ public class OneDriveService : IOneDriveService
             cancellationToken
         );
 
-        if (!response.IsSuccessStatusCode)
-        {
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-            throw new Exception("Bad Request");
-        }
+        if (response.IsSuccessStatusCode) return;
+        Console.WriteLine(await response.Content.ReadAsStringAsync(cancellationToken));
+        throw new Exception("Bad Request");
     }
 }

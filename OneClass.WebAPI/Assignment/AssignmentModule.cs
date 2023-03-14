@@ -125,5 +125,62 @@ public class AssignmentModule : ICarterModule
 				await session.SaveChangesAsync(cancellationToken);
 				return Results.Ok();
 			});
+
+		app.MapPost(
+			"/api/classrooms/{classroomId}/assignments/{assignmentId}/todo", 
+			async (
+				HttpContext context,
+				IUserService userService,
+				ITodoService todoService,
+				IDocumentSession session,
+				CancellationToken cancellationToken,
+				string classroomId,
+				string assignmentId
+			) =>
+			{
+				var accessToken = _accessTokenService.GetAccessToken(context);
+				var user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+				var classroom = await session
+					.Query<ClassroomData>()
+					.Where(x => x.Id == classroomId)
+					.FirstOrDefaultAsync(token: cancellationToken);
+				if (classroom is null)
+				{
+					return Results.NotFound();
+				}
+				if (!user.JoinedClasses.Any(x => x.ClassroomId == classroomId && x.Role == "Student"))
+				{
+					return Results.Unauthorized();
+				}
+
+				var assignment = await session
+					.Query<ClassroomAssignment>()
+					.Where(x => x.Id == assignmentId)
+					.FirstOrDefaultAsync(token: cancellationToken);
+				if (assignment is null)
+				{
+					return Results.NotFound();
+				}
+
+				var todoListId = user.TodoLists
+					.Where(x => x.ClassroomId == classroomId)
+					.Select(x => x.MsTodoId)
+					.FirstOrDefault();
+
+				if (todoListId is not null) {
+					var todo = await todoService.CreateTodoTaskAsync(
+						context, 
+						assignment.Title,
+						assignment.Content,
+						assignment.DueDate,
+						assignment.HasDueDate,
+						todoListId,
+						cancellationToken
+					);
+				}
+
+				return Results.Ok();
+			}
+		);
 	}
 }

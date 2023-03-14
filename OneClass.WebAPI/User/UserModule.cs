@@ -17,7 +17,7 @@ public class UserModule : ICarterModule
 				IAccessTokenService atService,
 				IUserService userService,
 				CancellationToken cancellationToken,
-				IOneDriveService oneDriveService) =>
+				IDriveService oneDriveService) =>
 			{
 			var accessToken = atService.GetAccessToken(context);
 			UserData user;

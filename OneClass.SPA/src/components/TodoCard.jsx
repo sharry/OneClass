@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 function TodoCard({ id, title, classroom, date, time, status }) {
 	return (
 		<>
@@ -9,7 +11,9 @@ function TodoCard({ id, title, classroom, date, time, status }) {
 					className="ml-3 object-cover w-16 h-16 rounded-full shadow dark:bg-gray-500"
 				/>
 				<div className="flex flex-col ml-4">
-					<h1 className="font-medium text-lg">TP Linux bootable sur windows ...</h1>
+					<h1 className="font-medium text-lg">
+                        <Link to="/assignmentcontent">TP Linux bootable sur windows ...</Link>
+                    </h1>
 					<p className="text-gray-500">
 						Classroom name
 					</p>

@@ -11,7 +11,7 @@ public record DriveItemRequest(
 );
 
 public record DriveItemInvitation(
-    String[] roles,
+    string[] Roles,
     Recipient[] Recipients,
     bool SendInvitation = false
 );
