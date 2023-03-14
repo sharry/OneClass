@@ -15,6 +15,7 @@ public interface ITodoService
         string title,
         string content,
         string dueDate,
+        bool hasDueDate,
         string listId,
         CancellationToken cancellationToken
     );
