@@ -6,117 +6,6 @@ import RequireAuth from "../components/RequireAuth";
 import { useQuery } from "@tanstack/react-query";
 import { getClasses } from "../api/class";
 
-// const Classes = [
-//   {
-//     id: 0,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-//   {
-//     id: 1,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-//   {
-//     id: 2,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-//   {
-//     id: 3,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-//   {
-//     id: 4,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-//   {
-//     id: 5,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-//   {
-//     id: 6,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-//   {
-//     id: 7,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-//   {
-//     id: 8,
-//     name: "Windows Server 2022",
-//     teacher: {
-//       name: "Said Naji",
-//       image: "https://source.unsplash.com/50x50/?portrait",
-//     },
-//     subject: "System Administration",
-//     todos: 12,
-//     students: 40,
-//     image: "https://source.unsplash.com/50x50/?portrait",
-//   },
-// ];
-
 function Home() {  
   const { isLoading, data } = useQuery({
     queryKey: ["classes"],
@@ -126,7 +15,6 @@ function Home() {
   if (isLoading) return "Loading...";
 
   const Classes = data;
-  console.log(Classes);
 
   return (
     <RequireAuth>
@@ -137,10 +25,11 @@ function Home() {
           {Classes.map((course) => (
             <CourseCard
               key={course.id}
+              id={course.id}
               name={course.title}
               teacher={course.teacher}
               subject={course.description}
-              todos={course.todos}
+              todos={course.assignmentsCount}
               students={course.studentIds}
               image={course.image}
             />
