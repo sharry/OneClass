@@ -1,86 +1,79 @@
 // this page is for teacher to create a class, it has an image in the top, with a botton on top of it, placed in the bottom right corner, then a classroom name input, a class code input, a subject a discription ,and a create button
 
 import React, { useContext, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createClass } from '../api/class';
 import OneClasseContext from '../context/OneClassContext';
 import RequireAuth from '../components/RequireAuth';
+import { useNavigate } from 'react-router-dom';
 // import { useHistory } from "react-dom";
 
 const CreateClass = () => {
+    const [image, setImage] = useState('image-01.svg');
     const [name, setName] = useState('');
-    const [code, setCode] = useState('');
-    const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
-    // const history = useHistory();
-    const queryClient = useQueryClient();
-    const { user } = useContext(OneClasseContext);
-    const { mutate } = useMutation(createClass, {
-        onSuccess: () => {
-            queryClient.invalidateQueries('classes');
-            // history.push('/classes');
-        },
-    });
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        mutate({ name, code, subject, description, teacher: user._id });
+        await createClass(name, description, image);
+        navigate("/");
     };
 
     return (
         <RequireAuth>
-            <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-28 sm:px-6 bg-white lg:px-8 dark:bg-gray-800">
-                <div className="w-full max-w-md p-6 my-8 overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
-
+            <div className="flex flex-col items-center justify-center py-2 sm:px-6 bg-white lg:px-8">
+                <div className="w-full max-w-md p-6 my-8 bg-white rounded-lg shadow-md">
+                    <h1 className="text-2xl font-bold">Create Classroom</h1>
 
                     <div className="mt-4">
                         <form onSubmit={handleSubmit}>
 
-                            {/* image with rounded corners, and a button of top of it,  */}
-                            <div className="relative w-full h-64 mb-6 rounded-md overflow-hidden">
+                            {/* <div className="relative w-full h-64 mb-6 rounded-md overflow-hidden">
                                 <img
                                     className="absolute inset-0 w-full h-full object-cover"
                                     src="https://placehold.jp/1280x360.png"
                                     alt="avatar"
                                 />
-                                {/* the button placed in the right bottom corner of the image, clicking it will open a modal to choose an image from a preset */}
                                 <label className="absolute bottom-2 right-2 block px-2 overflow bg-black opacity-50   shadow cursor-pointer text-white">
                                     Choose Image
                                     <input type="file" className="absolute inset-0 w-full h-full opacity-0" />
                                 </label>
-
-
-                            </div>
+                            </div> */}
 
                             <label className="block text-sm">
-                                <span className="text-gray-700 dark:text-gray-400">Class Name</span>
+                                <span className="text-gray-700">Class Image</span>
+                                <select 
+                                    className="block w-full px-4 py-3 mt-1 text-gray-700 bg-gray-200 border-transparent rounded-md focus:border-gray-500 focus:outline-none focus:shadow-outline-gray"
+                                    value={image}
+                                    onChange={(e) => setImage(e.target.value)}
+                                >
+                                    <option value="image-01.svg">Image 1</option>
+                                    <option value="image-02.svg">Image 2</option>
+                                    <option value="image-03.svg">Image 3</option>
+                                    <option value="image-04.svg">Image 4</option>
+                                </select>
+                            </label>
+                                    
+
+                            <label className="block text-sm">
+                                <span className="text-gray-700">Class Name</span>
                                 <input
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="block w-full px-4 py-3 mt-1 text-gray-700 bg-gray-200 border-transparent rounded-md dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:focus:shadow-outline-gray focus:border-gray-500 focus:outline-none focus:shadow-outline-gray"
+                                    className="block w-full px-4 py-3 mt-1 text-gray-700 bg-gray-200 border-transparent rounded-md focus:border-gray-500 focus:outline-none focus:shadow-outline-gray"
                                     placeholder="Class Name"
                                     required
                                 />
                             </label>
 
-
                             <label className="block mt-4 text-sm">
-                                <span className="text-gray-700 dark:text-gray-400">Subject</span>
-                                <input
-                                    value={subject}
-                                    onChange={(e) => setSubject(e.target.value)}
-                                    className="block w-full px-4 py-3 mt-1 text-gray-700 bg-gray-200 border-transparent rounded-md dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:focus:shadow-outline-gray focus:border-gray-500 focus:outline-none focus:shadow-outline-gray"
-                                    placeholder="Subject"
-                                    required
-                                />
-                            </label>
-
-                            <label className="block mt-4 text-sm">
-                                <span className="text-gray-700 dark:text-gray-400">Description</span>
+                                <span className="text-gray-700">Description</span>
                                 <textarea
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    className="block w-full px-4 py-3 mt-1 text-gray-700 bg-gray-200 border-transparent rounded-md dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:focus:shadow-outline-gray focus:border-gray-500 focus:outline-none focus:shadow-outline-gray"
+                                    className="block w-full px-4 py-3 mt-1 text-gray-700 bg-gray-200 border-transparent rounded-md focus:border-gray-500 focus:outline-none focus:shadow-outline-gray"
                                     placeholder="Description"
                                     required
                                 />
