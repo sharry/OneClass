@@ -1,11 +1,13 @@
 using Marten;
 using Carter;
+using Microsoft.Graph;
 using OneClass.Domain.DbModels;
 using OneClass.WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IGraphServiceClientProvider, GraphServiceClientProvider>();
 builder.Services.AddSingleton<IDriveService, DriveService>();
 builder.Services.AddSingleton<IAccessTokenService, AccessTokenService>();
 builder.Services.AddSingleton<IStorage, AzureBlobStorage>();

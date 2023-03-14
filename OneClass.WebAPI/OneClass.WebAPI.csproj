@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.7.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.15.0" />
     <PackageReference Include="Carter" Version="6.1.1" />
     <PackageReference Include="Marten" Version="5.11.0" />
-    <PackageReference Include="Microsoft.Graph" Version="5.1.0" />
+    <PackageReference Include="Microsoft.Graph" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Graph.Core" Version="3.0.2" />
     <PackageReference Include="Microsoft.Identity.Web" Version="2.5.0" />
     <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="2.5.0" />
   </ItemGroup>

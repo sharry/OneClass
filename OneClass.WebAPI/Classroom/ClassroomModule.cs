@@ -31,7 +31,39 @@ public class ClassroomModule : ICarterModule
                 var userClassrooms = classrooms
                     .Where(x => x.TeacherId == user.Id || x.StudentIds.Any(y => y == user.Id))
                     .ToList();
-                return Results.Ok(userClassrooms);
+               List<ClassroomResponse> classroomResponses = new();
+                foreach (var classroom in userClassrooms)
+                {
+                    var teacher = await session
+                        .Query<UserData>()
+                        .FirstOrDefaultAsync(x => x.Id == classroom.TeacherId, cancellationToken);
+                    if (teacher is null)
+                    {
+                        return Results.NotFound();
+                    }
+                    var assignmentsCount = await session
+                        .Query<ClassroomAssignment>()
+                        .Where(x => x.ClassroomId == classroom.Id)
+                        .CountAsync(cancellationToken);
+                    classroomResponses.Add(new ClassroomResponse(
+                        classroom.Id,
+                        classroom.Title,
+                        classroom.Description,
+                        classroom.Image,
+                        new TeacherResponse(
+                            teacher.Id,
+                            teacher.GivenName,
+                            teacher.Surname,
+                            teacher.DisplayName,
+                            teacher.EmailAddress
+                        ),
+                        classroom.StudentIds,
+                        classroom.JoinCode,
+                        classroom.OneDriveFolderId,
+                        assignmentsCount
+                    ));
+                }
+                return Results.Ok(classroomResponses);
             }
         );
 
