@@ -1,6 +1,6 @@
 function Navbar(){
     return <>
-        <header className="p-4 shadow">
+        <header className="p-4 shadow sticky top-0 bg-white">
         <div className="container flex justify-between h-16">
           <button className="flex justify-end p-4 md:hidden">
             <svg

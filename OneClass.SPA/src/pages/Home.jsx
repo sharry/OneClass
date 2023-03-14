@@ -1,11 +1,12 @@
 import Navbar from "../components/Navbar";
-import CourseCard from "../components/CourseCard";
 import BottomTabs from "../components/BottomTabs"
+import CourseCard from "../components/CourseCard";
+
 
 function Home() {
   return (
-    <div className="">
-      <Navbar /> <CourseCard /> <CourseCard /> <CourseCard /><CourseCard />
+    <div className="h-full">
+      <Navbar /> <CourseCard /> <CourseCard /><CourseCard /><CourseCard />
       <BottomTabs/>
     </div>
   );

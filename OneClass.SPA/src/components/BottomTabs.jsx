@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function BottomTabs(){
     return <>
-        <div className="bg-white sticky bottom-0 h-20 w-full flex justify-between items-center border-t-2">
+        <div className="bg-white fixed bottom-0 h-20 w-full flex justify-between items-center border-t-2">
           <div className="pl-10 flex flex-col justify-center items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
