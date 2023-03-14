@@ -1,4 +1,5 @@
-﻿using OneClass.Domain.GraphModels;
+﻿using Microsoft.Graph.Models;
+using OneClass.Domain.GraphModels;
 
 namespace OneClass.Domain.DbModels;
 using ClassId = String;
@@ -55,6 +56,20 @@ public sealed class UserData
 
     public void AddTodoList(string classId, string todoListId) =>
         TodoLists = TodoLists.Append(new(todoListId, classId)).ToArray();
+
+    public static UserData FromGraphUser(User me)
+    {
+        return new UserData(
+            me.Id,
+            me.GivenName,
+            me.Surname,
+            me.DisplayName,
+            me.UserPrincipalName,
+            string.Empty,
+            new List<JoinedClass>(),
+            new List<MsTodoList>()
+        );
+    }
 }
 
 public record JoinedClass(string ClassroomId, string Role);
