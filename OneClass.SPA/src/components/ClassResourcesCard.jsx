@@ -1,8 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Moment from "react-moment";
+import useRefresh from "../hooks/useRefresh";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 function ClassRessourcesCard({ teacher, dateTime, content, attchementsNbr }) {
+  dayjs.extend(relativeTime);
+  // eslint-disable-next-line no-unused-vars
+  const refresh = useRefresh();
   return (
     <>
       <div className="bg-slate-200 p-4 rounded-lg border-2 mb-4">
@@ -19,9 +24,7 @@ function ClassRessourcesCard({ teacher, dateTime, content, attchementsNbr }) {
                 <div className=""></div>
               </div>
             </h3>
-            <p>
-              <Moment fromNow>{dateTime}</Moment>
-            </p>
+            <p>{dayjs(dateTime).fromNow()}</p>
           </div>
         </div>
         <p className="text-xl px-6 py-2">{content}</p>

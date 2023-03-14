@@ -45,10 +45,10 @@ const App = () => {
                                 <Route path="/todo" element={<ToDo/>}/>
                                 <Route path="/notification" element={<NotificationPage/>}/>
                                 <Route path="/create" element={<CreateClass />} />
-                                <Route path="/classrources" element={<ClassRessources/>}/>
+                                <Route path="/classrources/:id" element={<ClassRessources/>}/>
                                 <Route path="/classrources/classcontent" element={<ClassResourcesContent/>}/>
-                                <Route path="/classrources/assignment" element={<Assignement/>}/>
-                                <Route path="/classrources/members" element={<Members/>}/>
+                                <Route path="/classrources/:id/assignment" element={<Assignement/>}/>
+                                <Route path="/classrources/:id/members" element={<Members/>}/>
                                 <Route path="/assignmentcontent" element={<AssignmentContent/>}/>  
                             </Routes>
                         </OneClassContext.Provider>
