@@ -26,13 +26,13 @@ function CourseCard({ name, subject, teacher, students, todos, image }) {
       <div className="flex justify-between">
         <div className="flex items-center space-x-2">
           <img
-            src={teacher}
+            src="https://source.unsplash.com/100x100/?portrait"
             alt="teacher avatar"
             className="object-cover object-center w-8 h-8 rounded-full shadow-sm border-white border-2"
           />
           <div className="-space-y-1">
             <h2 className="text-sm font-semibold leading-none">
-              {teacher}
+              {teacher.displayName}
             </h2>
           </div>
         </div>

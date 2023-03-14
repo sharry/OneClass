@@ -140,7 +140,7 @@ function Home() {
               name={course.title}
               teacher={course.teacher}
               subject={course.description}
-              todos={course.todos}
+              todos={course.assignmentsCount}
               students={course.studentIds}
               image={course.image}
             />
