@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 function CourseCard({ id, name, subject, teacher, students, todos, image }) {
   return (
     <div
-      className={`bg-[url('../assets/classrooms/${image}')] bg-no-repeat bg-cover m-2 rounded-2xl py-4 px-8 text-white`}
+      style={{ backgroundImage: `url('../assets/classrooms/${image}')` }}
+      className={` bg-no-repeat bg-cover m-2 rounded-2xl py-4 px-8 text-white`}
     >
       {/* Upper Div */}
       <div className="flex justify-between items-start mb-10">

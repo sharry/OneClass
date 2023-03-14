@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import ClassRessourcesCard from "../components/ClassResourcesCard";
 import RequireAuth from "../components/RequireAuth";
@@ -7,49 +7,21 @@ import { useParams } from "react-router-dom";
 import { getClassResources } from "../api/class";
 import { useQuery } from "@tanstack/react-query";
 // id, teacher, dateTime, content, attchementsNbr;
-const contentList = [
-  {
-    id: 1,
-    teacher: {
-      name: "Elkhiat Brahim",
-      image: "https://source.unsplash.com/100x100/?portrait",
-    },
-    dateTime: "2021-05-20 12:00:00",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    attchementsNbr: 2,
-  },
-  {
-    id: 2,
-    teacher: {
-      name: "Elkhiat Brahim",
-      image: "https://source.unsplash.com/100x100/?portrait",
-    },
-    dateTime: "2021-05-20 12:00:00",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    attchementsNbr: 2,
-  },
-  {
-    id: 3,
-    teacher: {
-      name: "Elkhiat Brahim",
-      image: "https://source.unsplash.com/100x100/?portrait",
-    },
-    dateTime: "2021-05-20 12:00:00",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    attchementsNbr: 0,
-  },
-];
 
 function ClassRessources() {
+  // on component mount, fetch the class resources using useQuery
   const { id } = useParams();
-  const { isLoading, data } = useQuery({
-    queryKey: ["classes", id],
-    queryFn: getClassResources,
-  });
-
+  const { isLoading, error, data } = useQuery(
+    ["classResources", id],
+    getClassResources
+  );
+  const [contentList, setContentList] = useState([]);
   if (isLoading) return "Loading...";
+  if (error) return "An error has occurred: " + error.message;
 
-  const contentList = data;
+  if (data) {
+    setContentList(data);
+  }
 
   return (
     <RequireAuth>
