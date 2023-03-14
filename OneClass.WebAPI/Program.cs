@@ -1,13 +1,10 @@
 using Marten;
 using Carter;
-using Microsoft.Graph;
-using OneClass.Domain.DbModels;
 using OneClass.WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IGraphServiceClientProvider, GraphServiceClientProvider>();
 builder.Services.AddSingleton<IDriveService, DriveService>();
 builder.Services.AddSingleton<IAccessTokenService, AccessTokenService>();
 builder.Services.AddSingleton<IStorage, AzureBlobStorage>();
@@ -29,12 +26,12 @@ builder.Services.AddCarter();
 
 var app = builder.Build();
 
-app.UseCors(builder =>
+app.UseCors(b =>
 {
-	builder.AllowAnyOrigin();
-	builder.AllowAnyMethod();
-	builder.AllowAnyHeader();
-	builder.SetIsOriginAllowed((host) => true);
+	b.AllowAnyOrigin();
+	b.AllowAnyMethod();
+	b.AllowAnyHeader();
+	b.SetIsOriginAllowed((host) => true);
 });
 app.UseHttpsRedirection();
 
