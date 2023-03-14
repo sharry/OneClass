@@ -6,42 +6,51 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import ToDo from "./pages/ToDo";
 import NotificationPage from "./pages/NotificationPage";
+import ClassRessources from "./pages/ClassResources";
+import ClassResourcesContent from "./pages/ClassRessourcesContent";
+
+const msalInstance = new PublicClientApplication(msalConfig);
 import CreateClass from "./pages/CreateClass";
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "./config/msalConfig";
+import Assignement from "./pages/Assignement";
 
 const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			staleTime: 100000,
-			cacheTime: 100000,
-		},
-	},
+    defaultOptions: {
+        queries: {
+            staleTime: 100000,
+            cacheTime: 100000,
+        },
+    },
 });
 
 const App = () => {
 	const loggedUser = useState(null);
-	const msalInstance = new PublicClientApplication(msalConfig);
-	return (
+    const msalInstance = new PublicClientApplication(msalConfig);
+    return (
         <React.StrictMode>
             <MsalProvider instance={msalInstance}>
-                <BrowserRouter>
-                    <QueryClientProvider client={queryClient}>
-                        <OneClassContext.Provider value={loggedUser}>
-                            <heOneClassContexter>
-                                <Link to="/">OneClass</Link>
-                            </heOneClassContexter>
-                            <Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/create" element={<CreateClass />} />
+        <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <OneClassContext.Provider value={loggedUser}>
+                    <heOneClassContexter>
+                    </heOneClassContexter>
+                    <Routes>
+                        <Route path="/" element={<Home/>}/>
                         <Route path="/todo" element={<ToDo/>}/>
                         <Route path="/notification" element={<NotificationPage/>}/>
-                            </Routes>
-                        </OneClassContext.Provider>
-                    </QueryClientProvider>
-                </BrowserRouter>
-            </MsalProvider>
+                        <Route path="/create" element={<CreateClass />} />
+                        <Route path="/classrources" element={<ClassRessources/>}/>
+                        <Route path="/classrources/classcontent" element={<ClassResourcesContent/>}/>
+                        <Route path="/classrources/assignment" element={<Assignement/>}/>
+                        
+                    </Routes>
+                </OneClassContext.Provider>
+            </QueryClientProvider>
+        </BrowserRouter>
+        
+        </MsalProvider>
         </React.StrictMode>
     )
 };

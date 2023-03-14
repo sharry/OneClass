@@ -27,6 +27,7 @@ const CreateClass = () => {
     };
 
     return (
+        
         <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-28 sm:px-6 bg-white lg:px-8 dark:bg-gray-800">
             <div className="w-full max-w-md p-6 my-8 overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
 
