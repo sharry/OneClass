@@ -72,7 +72,7 @@ public class ClassroomModule : ICarterModule
                 IAccessTokenService atService,
                 IUserService userService,
                 CancellationToken cancellationToken,
-                IOneDriveService oneDriveService
+                IDriveService oneDriveService
             ) =>
             {
                 var accessToken = atService.GetAccessToken(context);

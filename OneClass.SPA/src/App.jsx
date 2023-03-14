@@ -10,6 +10,8 @@ import CreateClass from "./pages/CreateClass";
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "./config/msalConfig";
+import { SignIn } from "./components/SignIn";
+
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -33,10 +35,11 @@ const App = () => {
                                 <Link to="/">OneClass</Link>
                             </heOneClassContexter>
                             <Routes>
+                                <Route path="/sign-in" element={<SignIn />} />
                                 <Route path="/" element={<Home />} />
                                 <Route path="/create" element={<CreateClass />} />
-                        <Route path="/todo" element={<ToDo/>}/>
-                        <Route path="/notification" element={<NotificationPage/>}/>
+                                <Route path="/todo" element={<ToDo/>}/>
+                                <Route path="/notification" element={<NotificationPage/>}/>
                             </Routes>
                         </OneClassContext.Provider>
                     </QueryClientProvider>
