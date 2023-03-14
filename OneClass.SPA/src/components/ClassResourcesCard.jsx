@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom"
+import React from "react";
+import { Link } from "react-router-dom";
 
-function ClassRessourcesCard(){
-    return <>
+function ClassRessourcesCard() {
+  return (
+    <>
       <div className="bg-slate-200 p-4 rounded-lg border-2 mb-4">
         <div className="flex py-2">
           <img
@@ -23,8 +25,8 @@ function ClassRessourcesCard(){
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem
           nemo sunt porro, quos ratione quidem rerum{" "}
         </p>
-        
-        <button className="ml-6 py-2 px-4 bg-slate-100 rounded-2xl border-2 mt-1 flex justify-between" >
+
+        <button className="ml-6 py-2 px-4 bg-slate-100 rounded-2xl border-2 mt-1 flex justify-between">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -40,11 +42,12 @@ function ClassRessourcesCard(){
             />
           </svg>
           <Link to="classcontent">
-          <span className="ml-2">3 attachements</span>
+            <span className="ml-2">3 attachements</span>
           </Link>
         </button>
       </div>
     </>
+  );
 }
 
-export default ClassRessourcesCard
+export default ClassRessourcesCard;

@@ -1,20 +1,21 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
-import React from "react";
 function CourseCard({ name, subject, teacher, students, todos }) {
   return (
-    <div className={`bg-[url('../assets/Group.svg')] bg-no-repeat bg-cover m-2 rounded-2xl py-4 px-8 text-white`} >
+    <div
+      className={`bg-[url('../assets/Group.svg')] bg-no-repeat bg-cover m-2 rounded-2xl py-4 px-8 text-white`}
+    >
       {/* Upper Div */}
       <div className="flex justify-between items-start mb-10">
         <div className="mt-5">
-        <Link to="classrources"><h1 className="font-medium text-3xl mb-3">Creative Art Design</h1></Link>
+          <Link to="classrources">
+            <h1 className="font-medium text-3xl mb-3">{name}</h1>
+          </Link>
           <p className="w-4/5">{subject}</p>
         </div>
         <button title="Open options" type="button" className="mt-5">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path d="M256,144a64,64,0,1,0-64-64A64.072,64.072,0,0,0,256,144Zm0-96a32,32,0,1,1-32,32A32.036,32.036,0,0,1,256,48Z"></path>
             <path d="M256,368a64,64,0,1,0,64,64A64.072,64.072,0,0,0,256,368Zm0,96a32,32,0,1,1,32-32A32.036,32.036,0,0,1,256,464Z"></path>
             <path d="M256,192a64,64,0,1,0,64,64A64.072,64.072,0,0,0,256,192Zm0,96a32,32,0,1,1,32-32A32.036,32.036,0,0,1,256,288Z"></path>
