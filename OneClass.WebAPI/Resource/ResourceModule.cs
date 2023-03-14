@@ -103,6 +103,7 @@ public class ResourceModule : ICarterModule
                 HttpContext context,
                 IAccessTokenService atService,
                 IUserService userService,
+                NewResourceNotificationService notificationService,
                 CancellationToken cancellationToken
             ) =>
             {
@@ -133,6 +134,18 @@ public class ResourceModule : ICarterModule
 
                 session.Store(resource);
                 await session.SaveChangesAsync(cancellationToken);
+
+                // Notify classroom students
+                var students = await session
+                    .Query<UserData>()
+                    .Where(x => x.Id.IsOneOf(classroom.StudentIds))
+                    .ToListAsync(cancellationToken);
+                    
+                await notificationService.notifyViaEmail(
+                    resource,
+                    students.Select(x => x.EmailAddress).ToArray(),
+                    accessToken
+                );
 
                 return Results.Ok(resource);
             }

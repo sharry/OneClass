@@ -9,6 +9,7 @@ builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IOneDriveService, OneDriveService>();
 builder.Services.AddSingleton<IAccessTokenService, AccessTokenService>();
 builder.Services.AddSingleton<IStorage, AzureBlobStorage>();
+builder.Services.AddSingleton<NewResourceNotificationService, NewResourceNotificationService>();
 
 builder.Services.AddMarten(config =>
 {
