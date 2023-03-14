@@ -23,29 +23,18 @@ public class UserService : IUserService
         {
             throw new Exception("Unauthorized");
         }
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Bearer",
-            accessToken
-        );
-        var response = await httpClient.GetAsync(
-            "https://graph.microsoft.com/v1.0/me",
-            cancellationToken
-        );
-        if (!response.IsSuccessStatusCode)
+        var client = new GraphServiceClientProvider()
+            .GetGraphServiceClient(accessToken);
+        var response = await client.Me.GetAsync(cancellationToken: cancellationToken);
+        if (response is null)
         {
             throw new Exception("Bad Request");
         }
-        var me = await response.Content.ReadFromJsonAsync<Me>(cancellationToken: cancellationToken);
-        if (me is null)
-        {
-            throw new Exception("Bad Request");
-        }
-
+        var me = response;
         var user = await _session
             .Query<UserData>()
             .FirstOrDefaultAsync(x => x.Id == me.Id, cancellationToken);
 
-        return user ?? UserData.FromMe(me);
+        return user ?? UserData.FromGraphUser(me);
     }
 }
