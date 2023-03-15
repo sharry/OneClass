@@ -9,15 +9,14 @@ import { useQuery } from "@tanstack/react-query";
 
 function Assignement() {
   const { id } = useParams();
-  const [assignments, setAssignments] = useState([]);
-  const { isLoading } = useQuery(
-    ["classAssignment", id],
-    getClassAssignments,
-    {
-      onSuccess: setAssignments,
-    }
-  );
+  const { isLoading, data } = useQuery({
+    queryKey: ["classAssignment", id],
+    queryFn: getClassAssignments,
+  });
+
   if (isLoading) return "Loading...";
+
+  const assignments = data || [];
 
   return (
     <RequireAuth>
