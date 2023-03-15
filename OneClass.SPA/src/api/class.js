@@ -29,3 +29,10 @@ export const createClass = async (title, description, image) => {
   });
   return response.data;
 };
+
+export const joinClass = async (code) => {
+  const response = await axios.post(`/classrooms/join`, {
+    code,
+  });
+  return response.data;
+};

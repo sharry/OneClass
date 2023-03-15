@@ -17,6 +17,7 @@ import Assignement from "./pages/Assignement";
 import AssignmentContent from "./pages/AssignementContent";
 import Members from "./pages/Members";
 import { SignIn } from "./pages/SignIn";
+import JoinClass from "./pages/JoinClass";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +43,7 @@ const App = () => {
                 <Route path="/todo" element={<ToDo />} />
                 <Route path="/notification" element={<NotificationPage />} />
                 <Route path="/create" element={<CreateClass />} />
+                <Route path="/join" element={<JoinClass />} />
                 <Route path="/classrources/:id" element={<ClassRessources />} />
                 <Route
                   path="/classrources/classcontent"

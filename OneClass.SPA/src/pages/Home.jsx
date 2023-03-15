@@ -14,7 +14,7 @@ function Home() {
 
   if (isLoading) return "Loading...";
 
-  const Classes = data;
+  const Classes = data || [];
 
   return (
     <RequireAuth>
