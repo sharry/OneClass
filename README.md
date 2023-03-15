@@ -6,7 +6,14 @@
 
 # OneClass
 
-OneClass is a classroom app built with .NET 6, using ASP.NET Web APIs and calls to Microsoft Graph using the .NET SDK, and a React frontend. It is designed to streamline the classroom experience for both students and teachers.
+OneClass is an easy-to-use online platform that helps teachers and students collaborate, communicate and create!
+
+With OneClass,
+- You can access your assignments and add them to your Microsoft To Do.
+- You can access your class resources anytime and anywhere.
+- You can share your work with OneDrive.
+
+OneClass is the ultimate tool for learning in the 21st century!
 
 # Team
 
