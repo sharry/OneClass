@@ -5,6 +5,7 @@ import CourseCard from "../components/CourseCard";
 import RequireAuth from "../components/RequireAuth";
 import { useQuery } from "@tanstack/react-query";
 import { getClasses } from "../api/class";
+import FAB from "../components/FAB";
 
 function Home() {
   const { isLoading, data } = useQuery({
@@ -57,6 +58,7 @@ function Home() {
 
         <BottomTabs />
       </div>
+      <FAB />
     </RequireAuth>
   );
 }
