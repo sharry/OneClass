@@ -6,7 +6,7 @@
 
 # OneClass
 
-OneClass is a classroom app built with .NET 6, Microsoft Graph API, and React. It is designed to streamline the classroom experience for both students and teachers.
+OneClass is a classroom app built with .NET 6, using ASP.NET Web APIs and calls to Microsoft Graph using the .NET SDK, and a React frontend. It is designed to streamline the classroom experience for both students and teachers.
 
 # Team
 
@@ -33,9 +33,21 @@ We are excited to learn new skills, gain new experiences, and contribute to the 
 
 ## Technologies
 
-- **.NET 6**: The backend is built with .NET 6 and ASP.NET Core 6.
-- **Microsoft Graph API**: The app uses the Microsoft Graph API to authenticate users and access their data.
-- **React**: The frontend is built with React JS and wsal for the authentication.
+- **ASP.NET Core**: The backend is built with ASP.NET Core Web API (.NET 6).
+- **Microsoft Graph .NET SDK**: The app uses the Microsoft Graph API to authenticate users and access their data.
+- **Azure Database for PostgreSQL flexible server**: The app data is persisted in an instance of PostgreSQL database in Azure.
+- **MSAL.NET and @azure/msal**: The app uses the MSAL.NET to authenticate users.
+- **React**: The frontend is built with React.
+
+## Architecture
+
+The application is a web-based solution that leverages Microsoft technologies to provide a seamless user experience across different platforms. The application consists of two main components: a back-end service and a front-end client. 
+
+The back-end service is built with ASP.NET, a framework that allows developers to create web applications using C# as programming languages. The back-end service communicates with various Microsoft apps and services, such as Outlook, OneDrive, To Do, etc., through the Microsoft Graph .NET SDK , which is a library that simplifies accessing Microsoft Graph data and functionality. The back-end service also stores additional data in a serverless PostgreSQL database running in Azure, which is treated as a document database thanks to <a href="http://martendb.io/">Marten</a>, an open source library that enables PostgreSQL features for .NET applications. The back-end service exposes a RESTful API that can be consumed by any client application that supports HTTP requests.
+
+The front-end client consists of two different applications: a React Single Page Application (SPA) and a .NET MAUI app (provisional). React is a JavaScript library for building user interfaces that can run on any web browser. .NET MAUI is a cross-platform framework for building native mobile and desktop applications using C# and XAML. Both client applications authenticate the user using the corresponding <a href="https://learn.microsoft.com/azure/active-directory/develop/msal-overview">MSAL</a> (Microsoft Authentication Library) library, which handles acquiring tokens from Azure Active Directory (AAD) or Microsoft identity platform endpoints. The client applications then provide the access token of the authenticated user to the back-end service when making API calls.
+
+<img src="https://s6.imgcdn.dev/S8KAe.png" alt="OneClass App Architecture" width="1000" />
 
 ## Installation
 
