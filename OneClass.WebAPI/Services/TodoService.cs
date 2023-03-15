@@ -1,67 +1,25 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Marten;
-using OneClass.Domain.GraphModels;
+using Microsoft.Graph.Models;
 
 namespace OneClass.WebAPI.Services;
 
 public class TodoService : ITodoService
 {
-    private readonly IAccessTokenService _accessTokenService;
-    private readonly IDocumentSession _session;
-    private readonly IUserService _userService;
-
-    public TodoService(
-        IAccessTokenService accessTokenService,
-        IDocumentSession session,
-        IUserService userService
-    )
-    {
-        _accessTokenService = accessTokenService;
-        _session = session;
-        _userService = userService;
-    }
-
-    public async Task<TodoList> CreateTodoListAsync(
-        HttpContext context,
+    public async Task<TodoTaskList> CreateTodoListAsync(
+        string accessToken,
         string name,
         CancellationToken cancellationToken
     )
     {
-        var token = _accessTokenService.GetAccessToken(context);
-        if (token is null)
-        {
-            throw new Exception("Unauthorized");
-        }
-
-        var todoList = new TodoListRequest(name);
-
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Bearer",
-            token
-        );
-
-        var response = await httpClient.PostAsync(
-            $"https://graph.microsoft.com/v1.0/me/todo/lists",
-            new StringContent(
-                JsonSerializer.Serialize(
-                    todoList,
-                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
-                ),
-                Encoding.UTF8,
-                "application/json"
-            ),
-            cancellationToken
-        );
-
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception("Bad Request");
-        }
-
-        var list = await response.Content.ReadFromJsonAsync<TodoList>(
+        var client = new GraphServiceClientProvider()
+            .GetGraphServiceClient(accessToken);
+        var list = await client.Me.Todo.Lists.PostAsync(
+            new TodoTaskList
+            {
+                DisplayName = name
+            },
             cancellationToken: cancellationToken
         );
 
@@ -69,12 +27,11 @@ public class TodoService : ITodoService
         {
             throw new Exception("Bad Request");
         }
-
         return list;
     }
 
     public async Task<TodoTask> CreateTodoTaskAsync(
-        HttpContext context,
+        string accessToken,
         string title,
         string content,
         string dueDate,
@@ -83,45 +40,26 @@ public class TodoService : ITodoService
         CancellationToken cancellationToken
     )
     {
-        var token = _accessTokenService.GetAccessToken(context);
-        if (token is null)
+        var todoTask = new Microsoft.Graph.Models.TodoTask
         {
-            throw new Exception("Unauthorized");
-        }
-
-        var todoTask = new TodoTaskRequest(
-            title,
-            new TodoTaskBody(content),
-            hasDueDate ? new TodoTaskDueDate(dueDate) : null
-        );
-
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Bearer",
-            token
-        );
-
-        var response = await httpClient.PostAsync(
-            $"https://graph.microsoft.com/v1.0/me/todo/lists/{listId}/tasks",
-            new StringContent(
-                JsonSerializer.Serialize(
-                    todoTask,
-                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
-                ),
-                Encoding.UTF8,
-                "application/json"
-            ),
-            cancellationToken
-        );
-
-        if (!response.IsSuccessStatusCode)
-        {
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-            throw new Exception("Bad Request");
-        }
-
-        var task = await response.Content.ReadFromJsonAsync<TodoTask>(
-            cancellationToken: cancellationToken
+            Title = title,
+            Body = new ItemBody
+            {
+                Content = content
+            },
+            DueDateTime = hasDueDate
+                ? new DateTimeTimeZone
+                {
+                    DateTime = dueDate,
+                    TimeZone = "UTC"
+                }
+                : null
+        };
+        var client = new GraphServiceClientProvider()
+            .GetGraphServiceClient(accessToken);
+        var task = await client.Me.Todo.Lists[listId].Tasks.PostAsync(
+            todoTask,
+            cancellationToken: cancellationToken 
         );
 
         if (task is null)

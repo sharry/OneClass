@@ -1,17 +1,17 @@
-using OneClass.Domain.GraphModels;
+using Microsoft.Graph.Models;
 
 namespace OneClass.WebAPI.Services;
 
 public interface ITodoService
 {
-    public Task<TodoList> CreateTodoListAsync(
-        HttpContext context,
+    public Task<TodoTaskList> CreateTodoListAsync(
+        string accessToken,
         string name,
         CancellationToken cancellationToken
     );
 
     public Task<TodoTask> CreateTodoTaskAsync(
-        HttpContext context,
+        string accessToken,
         string title,
         string content,
         string dueDate,

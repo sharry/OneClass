@@ -314,7 +314,12 @@ public class ClassroomModule : ICarterModule
                 classroom.StudentIds = classroom.StudentIds.Append(user.Id).ToArray();
                 session.Store(classroom);
 
-                var todoList = await todoService.CreateTodoListAsync(context, $"OneClass : {classroom.Title}", cancellationToken);
+                var todoList = await todoService
+                    .CreateTodoListAsync(
+                    token, 
+                    $"OneClass : {classroom.Title}", 
+                    cancellationToken
+                );
                 user.JoinClass(classroom.Id, "Student");
                 user.AddTodoList(classroom.Id, todoList.Id);
                 session.Store(user);

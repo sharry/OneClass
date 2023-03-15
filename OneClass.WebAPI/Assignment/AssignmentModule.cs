@@ -4,6 +4,8 @@ using System.Text.Json;
 using Carter;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Graph.Me.SendMail;
+using Microsoft.Graph.Models;
 using OneClass.Domain.DbModels;
 using OneClass.Domain.Utils;
 using OneClass.WebAPI.Services;
@@ -39,6 +41,7 @@ public class AssignmentModule : ICarterModule
 			HttpContext context,
 			IUserService userService,
 			IDocumentSession session,
+			IEmailService emailService,
 			[FromBody] ClassroomAssignmentRequest assignment,
 			string classroomId,
 			CancellationToken cancellationToken) =>
@@ -73,21 +76,13 @@ public class AssignmentModule : ICarterModule
 					.Any(c => c.ClassroomId == classroomId && c.Role == "Student"))
 				.Select(u => u.EmailAddress)
 				.ToListAsync(cancellationToken);
-			var httpClient = new HttpClient();
-			var emailRequest = new EmailMessage(
+			await emailService.SendEmailAsync(
+				accessToken,
 				assignment.Title,
-				new EmailMessageBody(assignment.Content ?? string.Empty, "Text"),
-				studentsEmails.Select(x => new EmailMessageToRecipient(
-					new EmailMessageToRecipientEmailAddress(x))).ToArray());
-			var emailRequestJson = JsonSerializer.Serialize(new { Message = emailRequest }, new JsonSerializerOptions
-			{
-				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-			});
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-			var emailResponse = await httpClient
-				.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail",
-					new StringContent(emailRequestJson, Encoding.UTF8, "application/json"),
-					cancellationToken);
+				assignment.Content ?? string.Empty,
+				studentsEmails,
+				cancellationToken
+			);
 			return Results.Ok(classroomAssignment);
 		});
 		app.MapDelete("/api/classrooms/{classroomId}/assignments/{assignmentId}",
@@ -169,7 +164,7 @@ public class AssignmentModule : ICarterModule
 
 				if (todoListId is not null) {
 					var todo = await todoService.CreateTodoTaskAsync(
-						context, 
+						accessToken, 
 						assignment.Title,
 						assignment.Content,
 						assignment.DueDate,
