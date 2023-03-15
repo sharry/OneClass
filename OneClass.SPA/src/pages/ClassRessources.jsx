@@ -11,17 +11,15 @@ import { useQuery } from "@tanstack/react-query";
 function ClassRessources() {
   // on component mount, fetch the class resources using useQuery
   const { id } = useParams();
-  const { isLoading, error, data } = useQuery(
-    ["classResources", id],
-    getClassResources
-  );
   const [contentList, setContentList] = useState([]);
+  const { isLoading } = useQuery(
+    ["classResources", id],
+    getClassResources,
+    {
+      onSuccess: setContentList,
+    }
+  );
   if (isLoading) return "Loading...";
-  if (error) return "An error has occurred: " + error.message;
-
-  if (data) {
-    setContentList(data);
-  }
 
   return (
     <RequireAuth>

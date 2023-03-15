@@ -9,9 +9,6 @@ export const getClassResources = async ({ queryKey }) => {
   const id = queryKey[1];
   const response = await axios.get(`/classrooms/${id}/resources`);
 
-  if (!response.ok) {
-    throw new Error(`details/${id} fetch not ok`);
-  }
   return response.data;
 };
 

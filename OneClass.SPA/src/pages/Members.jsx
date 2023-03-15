@@ -17,7 +17,6 @@ function Members() {
   if (isLoading) return "Loading...";
 
   const members = data;
-  console.log(members);
 
   return (
     <RequireAuth>

@@ -55,6 +55,7 @@ Note that while the main features of the app are functional, there are still som
 
 We also plan to implement additional features in the future to enhance the overall user experience. These include:
 
+- **Fix UI Bugs**: Fix UI bugs to improve the overall user experience.
 - **Classroom Chat**: Add a chat feature to allow students and teachers to communicate with each other.
 - **Classroom Video Conferencing**: Add a video conferencing feature to allow students and teachers to meet virtually.
 - **Classroom File Sharing**: Add a file sharing feature to allow students and teachers to share files with each other.
