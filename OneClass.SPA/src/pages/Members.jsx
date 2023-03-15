@@ -16,7 +16,7 @@ function Members() {
 
   if (isLoading) return "Loading...";
 
-  const members = data;
+  const members = data || [];
 
   return (
     <RequireAuth>

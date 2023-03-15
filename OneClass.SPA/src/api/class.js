@@ -39,3 +39,10 @@ export const getClassAssignments = async ({ queryKey }) => {
   const response = await axios.get(`/classrooms/${id}/assignments`);
   return response.data;
 }
+
+export const createResource = async (id, content) => {
+  const response = await axios.post(`/classrooms/${id}/resources`, {
+    content,
+  });
+  return response.data;
+};
