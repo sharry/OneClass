@@ -25,6 +25,7 @@ function Assignement() {
       {assignments.map((assignment) => (
         <TodoCard
           key={assignment.id}
+          id={assignment.id}
           title={assignment.title}
           classroom={assignment.classroom}
           hasDueDate={assignment.hasDueDate}

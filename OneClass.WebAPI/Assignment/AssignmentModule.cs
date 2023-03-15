@@ -36,6 +36,26 @@ public class AssignmentModule : ICarterModule
 				.ToListAsync(cancellationToken);
 			return Results.Ok(assignments);
 		});
+
+		app.MapGet("/api/assignments/{assignmentId}", 
+		async (
+			string assignmentId,
+			HttpContext context,
+			IUserService userService,
+			IDocumentSession session,
+			CancellationToken cancellationToken
+			) =>
+		{
+			var accessToken = _accessTokenService.GetAccessToken(context);
+			var user = await userService.GetAuthenticatedUserAsync(accessToken, cancellationToken);
+			var assignment = await session
+				.Query<ClassroomAssignment>()
+				.Where(x => x.Id == assignmentId)
+				.FirstOrDefaultAsync(cancellationToken);
+			
+			return Results.Ok(assignment);
+		});
+		
 		app.MapPost("/api/classrooms/{classroomId}/assignments",
 		async (
 			HttpContext context,

@@ -55,7 +55,7 @@ const App = () => {
                 />
                 <Route path="/classrources/:id/members" element={<Members />} />
                 <Route
-                  path="/assignmentcontent"
+                  path="/assignmentcontent/:id"
                   element={<AssignmentContent />}
                 />
               </Routes>

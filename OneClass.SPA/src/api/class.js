@@ -46,3 +46,9 @@ export const createResource = async (id, content) => {
   });
   return response.data;
 };
+
+export const getAssignment = async ({ queryKey }) => {
+  const id = queryKey[1];
+  const response = await axios.get(`/assignments/${id}`);
+  return response.data;
+};

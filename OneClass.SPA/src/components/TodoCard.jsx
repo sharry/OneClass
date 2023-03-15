@@ -13,7 +13,7 @@ function TodoCard({ id, title, classroom, hasDueDate, dueDate }) {
           />
           <div className="flex flex-col ml-4">
             <h1 className="font-medium text-lg">
-              <Link to="/assignmentcontent">{title}</Link>
+              <Link to={`/assignmentcontent/${id}`}>{title}</Link>
             </h1>
             <p className="text-gray-500">Classroom name</p>
           </div>
