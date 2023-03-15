@@ -8,6 +8,13 @@
 
 OneClass is a classroom app built with .NET 6, Microsoft Graph API, and React. It is designed to streamline the classroom experience for both students and teachers.
 
+# Team
+
+<p>
+We are thrilled to introduce our hackathon team, composed of four software engineering students from Morocco. Meet Brahim ELHOUBE, El Bachir OUTIDRARINE, Youssef BEN SADIK, and Abderrazzaq LAANAOUI (as shown in the picture from left to right). We have diverse skills and backgrounds in web and mobile applications. We are passionate about solving real-world problems with innovative solutions and cutting-edge technologies. We are eager to learn from other participants and mentors, and to showcase our creativity and potential in this hackathon.
+</p>
+<img src="https://s6.imgcdn.dev/S8yDS.jpg" alt="OneClass Team" width="500" />
+
 ## About The Competition
 
 Hack Together: Microsoft Graph and .NET is a hackathon for beginners to get started building scenario-based apps using .NET and Microsoft Graph.
