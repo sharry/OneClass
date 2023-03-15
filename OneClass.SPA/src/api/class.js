@@ -33,3 +33,9 @@ export const joinClass = async (code) => {
   });
   return response.data;
 };
+
+export const getClassAssignments = async ({ queryKey }) => {
+  const id = queryKey[1];
+  const response = await axios.get(`/classrooms/${id}/assignments`);
+  return response.data;
+}
