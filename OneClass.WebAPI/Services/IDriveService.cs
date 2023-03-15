@@ -1,5 +1,5 @@
+using Microsoft.Graph.Models;
 using OneClass.Domain.DbModels;
-using OneClass.Domain.GraphModels;
 
 namespace OneClass.WebAPI.Services;
 
@@ -29,8 +29,8 @@ public interface IDriveService
         CancellationToken cancellationToken
     );
 
-    public void ShareFileOrFolderAsync(
-        HttpContext context,
+    public Task ShareFileOrFolderAsync(
+        string token,
         string fileOfFolderId,
         string[] userEmails,
         CancellationToken cancellationToken

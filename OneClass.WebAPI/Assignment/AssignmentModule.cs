@@ -1,11 +1,6 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using Carter;
+﻿using Carter;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Graph.Me.SendMail;
-using Microsoft.Graph.Models;
 using OneClass.Domain.DbModels;
 using OneClass.Domain.Utils;
 using OneClass.WebAPI.Services;

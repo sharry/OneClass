@@ -1,7 +1,7 @@
 ﻿using Carter;
 using Marten;
+using Microsoft.Graph.Models;
 using OneClass.Domain.DbModels;
-using OneClass.Domain.GraphModels;
 using OneClass.WebAPI.Services;
 
 namespace OneClass.WebAPI.Assignment;
@@ -87,5 +87,3 @@ public class WorkSubmissionModule : ICarterModule
 		});
 	}
 }
-
-public record WorkSubmission(string UserId, string ClassroomId, string AssignmentId);

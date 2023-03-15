@@ -1,3 +1,4 @@
+using System.Globalization;
 using Carter;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
@@ -130,7 +131,7 @@ public class ResourceModule : ICarterModule
                 resource.Id = Guid.NewGuid().ToString();
                 resource.Teacher = new Teacher { Id = user.Id, Name = user.DisplayName };
                 resource.ClassroomId = classroomId;
-                resource.CreatedAt = DateTime.UtcNow.ToString();
+                resource.CreatedAt = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 
                 session.Store(resource);
                 await session.SaveChangesAsync(cancellationToken);
