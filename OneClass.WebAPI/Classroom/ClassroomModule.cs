@@ -2,6 +2,7 @@ using Carter;
 using Marten;
 using Microsoft.AspNetCore.Mvc;
 using OneClass.Domain.DbModels;
+using OneClass.Domain.Utils;
 using OneClass.WebAPI.Services;
 
 namespace OneClass.WebAPI.Classroom;
@@ -10,6 +11,89 @@ public class ClassroomModule : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
+
+        app.MapGet("/dummy", (
+            IDocumentSession session
+        ) => {
+            // Delete all data in the database
+            session.DeleteWhere<ClassroomData>(x => true);
+            session.DeleteWhere<ResourceData>(x => true);
+            session.DeleteWhere<ClassroomAssignment>(x => true);
+
+            var userIds = new List<string>();
+            userIds.Add("9504c03bb803bbc4"); // Youssef
+            userIds.Add("d2a0e7927b7d719e"); // Elbachir
+            userIds.Add("954da67e6be3e94f"); // Abderrazaq
+            userIds.Add("12f00991b3f9f4ae"); // Brahim
+
+            // Create classrooms for users
+            for (int i = 0; i < 10; i++)
+            {
+                var classroom = new ClassroomData();
+                classroom.Id = Guid.NewGuid().ToString();
+                classroom.Title = $"Classroom {i}";
+                classroom.Description = $"Classroom {i} description";
+                classroom.Image = $"image-0{new Random().Next(1, 5)}.svg";
+                classroom.JoinCode = Guid.NewGuid().ToString().Substring(0, 6);
+                classroom.TeacherId = userIds[new Random().Next(0, 4)];
+                classroom.StudentIds = Array.Empty<string>();
+                session.Store(classroom);
+            }
+
+            // Create resources for classrooms
+            var classrooms = session.Query<ClassroomData>().ToList();
+            for (int i = 0; i < 20; i++)
+            {
+                var classroom = classrooms[new Random().Next(0, 10)];
+                var teacher = session.Query<UserData>().FirstOrDefault(x => x.Id == classroom.TeacherId);
+                var resource = new ResourceData();
+                resource.Id = Guid.NewGuid().ToString();
+                resource.Content = $"Resource {i} Content";
+                resource.Teacher = new Teacher
+                {
+                    Id = classroom.TeacherId,
+                    Name = teacher?.DisplayName ?? "Teacher Name",
+                };
+                resource.ClassroomId = classroom.Id;
+                resource.CreatedAt = DateTime.UtcNow.ToIso8601String();
+                resource.Attachments = Array.Empty<AttachedFile>();
+                session.Store(resource);
+            }
+
+            // Create assignments for classrooms
+            for (int i = 0; i < 20; i++)
+            {
+                var classroom = classrooms[new Random().Next(0, 10)];
+                var assignment = new ClassroomAssignment(classroom.TeacherId, classroom.Id);
+                assignment.Id = Guid.NewGuid().ToString();
+                assignment.Title = $"Assignment {i}";
+                assignment.Content = $"Assignment {i} Content";
+                assignment.HasDueDate = new Random().Next(0, 2) == 1;
+                assignment.DueDate = DateTime.UtcNow.AddDays(new Random().Next(1, 10)).ToIso8601String();
+                assignment.AttachedFiles = Array.Empty<AttachedFile>();
+                session.Store(assignment);
+            }
+
+            // Add students to classes
+            var classes = session.Query<ClassroomData>().ToList();
+            foreach (var classroom in classes)
+            {
+                var students = session.Query<UserData>().Where(x => x.Id != classroom.TeacherId).ToList();
+                var studentsCount = new Random().Next(1, 5);
+                for (int i = 0; i < studentsCount; i++)
+                {
+                    var student = students[new Random().Next(0, students.Count)];
+                    classroom.StudentIds = classroom.StudentIds.Append(student.Id).ToArray();
+                    session.Store(classroom);
+                    session.Store(student);
+                }
+            }
+
+            session.SaveChanges();
+
+            return Results.Ok();
+        });
+
         app.MapGet(
             "/api/classrooms",
             async (
